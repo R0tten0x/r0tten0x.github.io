@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>R0tten0x</title>
-  <!-- Link to 3270 Nerd Font in your /fonts folder -->
   <style>
     @font-face {
       font-family: '3270';
@@ -60,8 +59,8 @@
       padding-bottom: 18px;
     }
     .terminal-output {
-  color: #ffffff;    /* hot punk pink, change as you wish */
-  font-size: 2.24rem; /* adjust to taste */
+  color: #ffffff;   /* white output color */ 
+  font-size: 2.24rem; 
   font-weight: normal;
 }
     .terminal-bar {
@@ -95,8 +94,7 @@
       letter-spacing: 0.05em;
     }
 .terminal-content {
-  /* Remove or comment out min-height: 128px; */
-  /* min-height: 128px; */
+
   padding: 32px 28px 8px 28px;
   color: #5CFF9C;
   font-size: 1.2rem;
@@ -106,8 +104,7 @@
   letter-spacing: 0.07em;
   border-radius: 0 0 8px 8px;
   word-break: break-all;
-  /* Change this line: */
-  white-space: pre-wrap;  /* instead of just pre */
+  white-space: pre-wrap; 
   text-shadow: 0 0 4px #5CFF9C44, 0 0 11px #232323, 0 0 1px #FF5CB3;
   text-align: left;
 }
@@ -258,15 +255,13 @@ const terminal = document.getElementById('terminal-content');
 const prompt = '<span class="terminal-prompt">r0tten0x@RobertsMacbookPro:~$ </span>';
 const command = 'cat ~/.R0ttenOx/whoIsThis.txt';
 const output = '<span class="terminal-output">R0tten0x | Indie Swift Dev.</span>';
-const comingSoon = '# Coming soon...'; // <---- add this line
+const comingSoon = '# Coming soon...';
 
 let typingSpeed = 80;
 let pauseShort = 500;
 let pauseLong = 900;
 
-// ...rest of script...
 
-// Step 1: Always show prompt, only animate command typing
 let i = 0;
 function typeCommand() {
   terminal.innerHTML = prompt + command.slice(0, i) + '<span class="cursor"></span>';
@@ -278,7 +273,6 @@ function typeCommand() {
   }
 }
 
-// Step 2: Show output with new prompt, animate "coming soon..."
 let j = 0;
 function showOutput() {
   terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt;
@@ -286,13 +280,11 @@ function showOutput() {
 }
 
 function typeComingSoon() {
-  // Animate "coming soon..." after the new prompt
   if (j < comingSoon.length) {
     terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon.slice(0, j) + '<span class="cursor"></span>';
     j++;
     setTimeout(typeComingSoon, typingSpeed);
   } else {
-    // Keep blinking cursor at the end
     terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon + prompt + '<span class="cursor"></span>';
   }
 }
