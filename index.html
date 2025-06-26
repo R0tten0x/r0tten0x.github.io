@@ -60,7 +60,7 @@
     }
     .terminal-output {
   color: #ffffff;   /* white output color */ 
-  font-size: 2.24rem; 
+  font-size: 2.15rem; 
   font-weight: normal;
 }
     .terminal-bar {
@@ -247,9 +247,9 @@
       <span class="traffic-light green"></span>
       <span class="terminal-title">R0tten0x@RobertsMacbookPro</span>
     </div>
-    <div id="coming-soon" class="terminal-content" style="color:#FF5CB3;"></div>
+    <div id="coming-soon" class="terminal-content" style="color:#e9037e;"></div>
   </div>
-  <div class="projects-title">Current Projects</div>
+  <div class="projects-title">Current Projects In Beta</div>
   <div class="testflight-preview">
     <div class="fake-appstore-card">
       <img class="app-icon" src="img/blackboxJournal.png" alt="Blackbox Journal Icon" />
@@ -265,7 +265,7 @@
   </div>
   <script>
 const terminal = document.getElementById('terminal-content');
-const prompt = '<span class="terminal-prompt">r0tten0x@RobertsMacbookPro:~$ </span>';
+const prompt = '<span class="terminal-prompt">root@RobertsMacbookPro:~$ </span>';
 const command = 'cat ~/.R0ttenOx/whoIsThis.txt';
 const output = '<span class="terminal-output">R0tten0x | Indie Swift Dev.</span>';
 const comingSoon = '# Coming soon...';
@@ -298,7 +298,7 @@ function typeComingSoon() {
     j++;
     setTimeout(typeComingSoon, typingSpeed);
   } else {
-    terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon + prompt + '<span class="cursor"></span>';
+    terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon + '\n' + prompt + '<span class="cursor"></span>';
   }
 }
 
