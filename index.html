@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>R0tten0x</title>
+  <!-- Link to 3270 Nerd Font in your /fonts folder -->
+  <style>
+    @font-face {
+      font-family: '3270';
+      src: url('/fonts/3270-regular.woff2') format('woff2'),
+           url('/fonts/3270-regular.woff') format('woff'),
+           url('/fonts/3270-regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    body, html {
+      height: 100%;
+      margin: 0;
+      background: #191919;
+      color: #5CFF9C;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      width: 100vw;
+    }
+    .site-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100vw;
+      max-width: 800px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+    .terminal-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw; height: 100vh;
+      background: repeating-linear-gradient(
+        to bottom, #232323 0 2px, #191919 2px 32px
+      );
+      opacity: 0.85;
+      z-index: 0;
+    }
+    .terminal-window {
+      position: relative;
+      width: 96vw;
+      max-width: 640px;
+      min-width: 220px;
+      border-radius: 12px 12px 9px 9px;
+      box-shadow: 0 12px 48px #000c, 0 2px 0 #333;
+      background: #141414;
+      border: 1.6px solid #222;
+      font-family: '3270', 'Fira Mono', 'Menlo', monospace;
+      z-index: 1;
+      overflow: hidden;
+      padding-bottom: 18px;
+    }
+    .terminal-output {
+  color: #ffffff;    /* hot punk pink, change as you wish */
+  font-size: 2.24rem; /* adjust to taste */
+  font-weight: normal;
+}
+    .terminal-bar {
+      height: 38px;
+      background: linear-gradient(180deg, #232428 80%, #191919 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 7px;
+      border-radius: 10px 10px 0 0;
+      border-bottom: 1px solid #262626;
+      user-select: none;
+    }
+    .traffic-light {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      margin-right: 2px;
+      border: 1.5px solid #18181888;
+      display: inline-block;
+    }
+    .red { background: #FF5F56; }
+    .yellow { background: #FFBD2E; }
+    .green { background: #27C93F; }
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      color: #B2B2B2;
+      font-size: 1.05rem;
+      font-family: 'Fira Mono', monospace;
+      opacity: 0.66;
+      letter-spacing: 0.05em;
+    }
+.terminal-content {
+  /* Remove or comment out min-height: 128px; */
+  /* min-height: 128px; */
+  padding: 32px 28px 8px 28px;
+  color: #5CFF9C;
+  font-size: 1.2rem;
+  font-family: '3270', 'Fira Mono', 'Menlo', monospace;
+  background: none;
+  line-height: 1.32;
+  letter-spacing: 0.07em;
+  border-radius: 0 0 8px 8px;
+  word-break: break-all;
+  /* Change this line: */
+  white-space: pre-wrap;  /* instead of just pre */
+  text-shadow: 0 0 4px #5CFF9C44, 0 0 11px #232323, 0 0 1px #FF5CB3;
+  text-align: left;
+}
+    .cursor {
+      display: inline-block;
+      width: 0.74ch;
+      background: #5CFF9C;
+      animation: blink 0.85s steps(2, start) infinite;
+      margin-left: 0.08em;
+      height: 1.08em;
+      vertical-align: -0.14em;
+      border-radius: 2.5px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      57% { opacity: 0; }
+    }
+    .hidden { display: none; }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.7s 0.12s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @media (max-width: 500px) {
+      .terminal-window { max-width: 99vw; padding-bottom: 10px; }
+      .terminal-content { font-size: 1.1rem; padding: 20px 10px 6px 10px; }
+      .terminal-bar { padding: 0 9px; }
+    }
+    .terminal-prompt {
+      font-size: 1.3rem;
+      color: #4df58c;
+      font-weight: bold;
+    }
+    .fake-appstore-card {
+      display: flex;
+      align-items: center;
+      background: #18191d;
+      border: 2px solid #3f3f3f;
+      border-radius: 13px;
+      box-shadow: 0 2px 12px #FF5CB322, 0 1px 2px #232323dd;
+      padding: 14px 16px;
+      gap: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .app-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 15px;
+      box-shadow: 0 3px 18px #23232399, 0 0px 0.5px #222;
+      background: #222;
+    }
+    .appstore-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .appstore-title {
+      font-family: 'LeagueGothic', '3270', Arial, sans-serif;
+      font-size: 1.45rem;
+      color: #fff;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+      margin-bottom: 3px;
+    }
+    .appstore-dev {
+      color: #5CFF9C;
+      font-size: 0.93rem;
+      margin-bottom: 9px;
+      opacity: 0.86;
+    }
+    .tf-link {
+      color: #FF5CB3;
+      background: #232323;
+      padding: 6px 14px 7px 14px;
+      font-size: 1.09rem;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 0;
+      text-decoration: none;
+      font-weight: bold;
+      letter-spacing: 0.01em;
+      box-shadow: 0 1px 6px #FF5CB355;
+      border: 1.2px solid #FF5CB3;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tf-link:hover, .tf-link:focus {
+      background: #FF5CB3;
+      color: #18191d;
+      text-decoration: underline wavy #fff8;
+    }
+    @media (max-width: 520px) {
+      .fake-appstore-card { flex-direction: column; gap: 10px; padding: 10px; }
+      .app-icon { width: 56px; height: 56px; }
+      .appstore-title { font-size: 1.09rem; }
+    }
+    .projects-title {
+      margin: 52px auto 14px auto;
+      text-align: center;
+      font-size: 1.19rem;
+      font-family: '3270', 'Fira Mono', 'Menlo', monospace;
+      font-weight: bold;
+      color: #5CFF9C;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px #191919cc, 0 0 1px #FF5CB3;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal-bg"></div>
+  <div class="site-stack">
+  <div id="splash-window" class="terminal-window">
+    <div class="terminal-bar">
+      <span class="traffic-light red"></span>
+      <span class="traffic-light yellow"></span>
+      <span class="traffic-light green"></span>
+      <span class="terminal-title">R0tten0x@RobertsMacbookPro</span>
+    </div>
+    <div id="terminal-content" class="terminal-content"></div>
+  </div>
+  <div id="main-window" class="terminal-window hidden fade-in">
+    <div class="terminal-bar">
+      <span class="traffic-light red"></span>
+      <span class="traffic-light yellow"></span>
+      <span class="traffic-light green"></span>
+      <span class="terminal-title">R0tten0x@RobertsMacbookPro</span>
+    </div>
+    <div id="coming-soon" class="terminal-content" style="color:#FF5CB3;"></div>
+  </div>
+  <div class="projects-title">Current Projects</div>
+  <div class="testflight-preview">
+    <div class="fake-appstore-card">
+      <img class="app-icon" src="img/blackboxJournal.png" alt="Blackbox Journal Icon" />
+      <div class="appstore-meta">
+        <div class="appstore-title">Blackbox Journal</div>
+        <div class="appstore-dev">R0tten0x · Journaling</div>
+        <a class="tf-link" href="https://testflight.apple.com/join/XuECJt1m" target="_blank" rel="noopener">
+          <span>Join Beta on TestFlight</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+const terminal = document.getElementById('terminal-content');
+const prompt = '<span class="terminal-prompt">r0tten0x@RobertsMacbookPro:~$ </span>';
+const command = 'cat ~/.R0ttenOx/whoIsThis.txt';
+const output = '<span class="terminal-output">R0tten0x | Indie Swift Dev.</span>';
+const comingSoon = '# Coming soon...'; // <---- add this line
+
+let typingSpeed = 80;
+let pauseShort = 500;
+let pauseLong = 900;
+
+// ...rest of script...
+
+// Step 1: Always show prompt, only animate command typing
+let i = 0;
+function typeCommand() {
+  terminal.innerHTML = prompt + command.slice(0, i) + '<span class="cursor"></span>';
+  if (i < command.length) {
+    i++;
+    setTimeout(typeCommand, typingSpeed);
+  } else {
+    setTimeout(showOutput, pauseLong);
+  }
+}
+
+// Step 2: Show output with new prompt, animate "coming soon..."
+let j = 0;
+function showOutput() {
+  terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt;
+  setTimeout(typeComingSoon, pauseShort);
+}
+
+function typeComingSoon() {
+  // Animate "coming soon..." after the new prompt
+  if (j < comingSoon.length) {
+    terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon.slice(0, j) + '<span class="cursor"></span>';
+    j++;
+    setTimeout(typeComingSoon, typingSpeed);
+  } else {
+    // Keep blinking cursor at the end
+    terminal.innerHTML = prompt + command + '\n' + output + '\n' + prompt + comingSoon + prompt + '<span class="cursor"></span>';
+  }
+}
+
+window.onload = typeCommand;
+  </script>
+</body>
+</html>
