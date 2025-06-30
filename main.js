@@ -1,4 +1,3 @@
-
 (function() {
   // Element selection
   const terminal = document.getElementById('terminal-content');

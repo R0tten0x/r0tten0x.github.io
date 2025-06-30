@@ -1,0 +1,12 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card background -->
+  <rect x="16" y="32" width="128" height="96" rx="18" fill="#fff" stroke="#222" stroke-width="3"/>
+  <!-- Portrait circle (blurred face) -->
+  <circle cx="80" cy="70" r="24" fill="#BBB" stroke="#555" stroke-width="2" opacity="0.6"/>
+  <!-- Redacted black bar (name) -->
+  <rect x="44" y="104" width="72" height="18" rx="6" fill="#111"/>
+  <!-- Red flag emoji (corner) -->
+  <text x="122" y="44" font-size="24">🚩</text>
+  <!-- Watermark / cheeky label -->
+  <text x="80" y="152" font-size="13" text-anchor="middle" fill="#222" opacity="0.16">DateVault</text>
+</svg>

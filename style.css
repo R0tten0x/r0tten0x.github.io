@@ -487,7 +487,7 @@
 .terminal-window {
   position: relative;
   overflow: hidden;
-  /* ...rest of your styles... */
+
   border-radius: 12px 12px 9px 9px;
 }
 

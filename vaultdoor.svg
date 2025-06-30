@@ -1,0 +1,14 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Heart Vault Outline -->
+  <path d="M80 120
+           Q40 90, 40 60
+           Q40 36, 80 56
+           Q120 36, 120 60
+           Q120 90, 80 120
+           Z"
+        fill="#fff" stroke="#222" stroke-width="4"/>
+  <!-- Dial as small circle -->
+  <circle cx="80" cy="78" r="14" fill="#f34" stroke="#222" stroke-width="2"/>
+  <!-- Keyhole under dial -->
+  <rect x="77" y="98" width="6" height="12" rx="2" fill="#222" opacity="0.26"/>
+</svg>
