@@ -1,8 +1,0 @@
-<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Peach shape -->
-  <ellipse cx="80" cy="92" rx="38" ry="30" fill="#fff" stroke="#222" stroke-width="4"/>
-  <!-- Vault dial on cheek -->
-  <circle cx="100" cy="100" r="11" fill="#f34" stroke="#222" stroke-width="2"/>
-  <!-- Tiny flag tucked in -->
-  <rect x="116" y="72" width="12" height="14" rx="2" fill="#f34" stroke="#222" stroke-width="1.2"/>
-</svg>
