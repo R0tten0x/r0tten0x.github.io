@@ -22,7 +22,7 @@
 
     try {
       await addDoc(collection(db, "feedback"), {
-        type,
+        type: `${type}-DateVault`,
         message,
         email,
         timestamp: Date.now() / 1000
