@@ -10,7 +10,7 @@
 
   const prompt = '<span class="terminal-prompt">root@RobertsMacbookPro:~$ </span>';
   const command = 'cat ~/.R0ttenOx/whoIsThis.txt';
-  const output = '<span class="terminal-output">R0tten0x | Indie Swift Dev.</span>';
+  const output = '<span class="terminal-output">R0tten0x | Mobile Developer.</span>';
     const about = '<span class="terminal-prompt">root@RobertsMacbookPro:~$ </span>';
   const about_command = 'cat ~/.R0ttenOx/aboutRobert.txt';
 const about_output = `
