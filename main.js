@@ -16,16 +16,18 @@
 const about_output = `
   <span class="terminal-output">
     <p><strong>About Robert | R0tten0x</strong></p>
-    <p>Robert doesn’t build for the mainstream—he breaks it. An indie iOS/macOS dev who refuses to compromise, he’s spent 27 years in tech tearing down bloat and hype, chasing what actually works.<br>
-    Every app is a middle finger to the status quo: sharp UI, ruthless performance, and a finish that’s all killer, no filler.<br><br>
-    Design is clean because clutter is the enemy. Features are lean, nothing tacked on for trend-chasing. If it’s not fun, not fast, or not real—it’s trashed.<br>
-    When Robert isn’t unleashing new builds, he’s plugged into hardcore music, deep tech rabbit holes, or hunting down the next perfect cup of coffee.<br><br>
-    This is indie development with teeth. No gatekeepers. No compromises. Never apologizing for doing shit his own way.
+    <p>Robert is an experienced IT professional with 27 years in the industry.
+He has developed strong leadership skills through extensive work in 
+research, technology strategy, and implementation. Currently focused<br> 
+on mobile software development, Robert brings depth of expertise to
+modern application design and engineering. Originally from San Diego, California,<br> 
+he continues to apply his technical knowledge and leadership experience to drive 
+innovation and deliver results.<br>
     </span>
 `;
 //   const comingSoon = '# Coming soon...';
 
-  const typingSpeed = 100;
+  const typingSpeed = 50;
   const pauseShort = 400;
   const pauseLong = 300;
 
