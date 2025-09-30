@@ -9,11 +9,11 @@
 
 
   const prompt = '<span class="terminal-prompt">root@ThinkpadP14Fedora:~$ </span>';
-  const command = 'less ~/.R0ttenOx/whoIsThis.txt';
-  const output = '<span class="terminal-output">R0tten0x | Mobile App Developer.</span>';
+  const command = 'less ~/.R0ttenOx/whoIsThis.md';
+  const output = '<span class="terminal-output">- R0tten0x | Robert<br>- Mobile App Developer<br>- IT Professional</span>';
     const about = '<span class="terminal-prompt">root@ThinkpadP14Fedora:~$ </span>';
-  const about_command = 'less ~/.R0ttenOx/aboutRobert.txt';
-const about_output = `<span class="terminal-output"> <p><div style="text-align: center;"><pre style="font-size: 10px; color=#ffff;">
+  const about_command = 'less ~/.R0ttenOx/aboutRobert.md';
+const about_output = `<span class="terminal-output-about"> <p><div style="text-align: center;"><pre style="font-size: 10px; color=#ffff;">
 ██████╗  ██████╗ ████████╗████████╗███████╗███╗   ██╗ ██████╗ ██╗  ██╗
 ██╔══██╗██╔═████╗╚══██╔══╝╚══██╔══╝██╔════╝████╗  ██║██╔═████╗╚██╗██╔╝
 ██████╔╝██║██╔██║   ██║      ██║   █████╗  ██╔██╗ ██║██║██╔██║ ╚███╔╝ 
@@ -21,7 +21,7 @@ const about_output = `<span class="terminal-output"> <p><div style="text-align: 
 ██║  ██║╚██████╔╝   ██║      ██║   ███████╗██║ ╚████║╚██████╔╝██╔╝ ██╗
 ╚═╝  ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝
 </div>
-<br>Robert is an experienced IT professional with 27 years in the industry. He has developed strong leadership skills through extensive work in research, technology strategy, and implementation. Currently focused on mobile software development, Robert brings depth of expertise to modern application design and engineering. Originally from San Diego, California, he continues to apply his technical knowledge and leadership experience to drive innovation and deliver results.<br></span>`;
+Robert is an experienced IT professional with 27 years in the industry. He has developed strong leadership skills through extensive work in research, technology strategy, and implementation. Currently focused on mobile software development, Robert brings depth of expertise to modern application design and engineering. Originally from San Diego, California, he continues to apply his technical knowledge and leadership experience to drive innovation and deliver results.<br></span>`;
   const typingSpeed = 50;
   const pauseShort = 400;
   const pauseLong = 300;
