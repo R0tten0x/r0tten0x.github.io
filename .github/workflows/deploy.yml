@@ -38,10 +38,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: |
-          # Re-enable basePath for GitHub Pages deployment
-          sed -i 's|// basePath: "/r0tten0x.github.io"|basePath: "/r0tten0x.github.io"|' next.config.ts
-          npm run build
+        run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
