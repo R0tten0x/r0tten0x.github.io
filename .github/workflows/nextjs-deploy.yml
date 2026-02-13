@@ -45,4 +45,3 @@ jobs:
           # For custom domains, ensure the CNAME record is configured in Cloudflare.
           # The wrangler-action will handle associating the deployment with the custom domain.
 
-      - name: Announce deployment
