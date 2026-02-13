@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import GlitchText from "./GlitchText";
-import SectionWrapper from "./SectionWrapper";
+import SectionWrapper from "@/components/SectionWrapper";
+import GlitchText from "@/components/GlitchText";
 import { BIO, STATS } from "@/lib/constants";
 
 export default function AboutSection() {

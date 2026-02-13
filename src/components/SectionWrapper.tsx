@@ -1,31 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import React from 'react';
 
 interface SectionWrapperProps {
-  children: ReactNode;
   id: string;
   className?: string;
-  delay?: number;
+  children: React.ReactNode;
 }
 
-export default function SectionWrapper({
-  children,
-  id,
-  className = "",
-  delay = 0,
-}: SectionWrapperProps) {
+const SectionWrapper: React.FC<SectionWrapperProps> = ({ id, className, children }) => {
   return (
-    <motion.section
-      id={id}
-      className={`relative ${className}`}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, ease: "easeOut", delay }}
-    >
+    <section id={id} className={`relative ${className || ''}`}>
       {children}
-    </motion.section>
+    </section>
   );
-}
+};
+
+export default SectionWrapper;

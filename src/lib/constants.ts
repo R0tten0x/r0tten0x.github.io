@@ -3,7 +3,7 @@ export const SITE = {
   fullName: "Robert",
   title: "Software Engineer // Fullstack Developer",
   prompt: "root@ThinkpadP14Fedora:~$",
-  copyright: `\u00A9 2026 Robert || R0tten0x`,
+  copyright: `© 2026 Robert || R0tten0x`,
 };
 
 export const BIO = `Robert is an experienced IT professional with 27 years in the industry. He has developed strong leadership skills through extensive work in research, technology strategy, and implementation. Currently focused on software engineering and fullstack development, Robert brings depth of expertise to modern application design and engineering. Originally from San Diego, California, he continues to apply his technical knowledge and leadership experience to drive innovation and deliver results.`;

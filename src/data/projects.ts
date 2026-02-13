@@ -34,9 +34,9 @@ export const projects: Project[] = [
     description:
       "An anonymous social platform for raw, unfiltered expression. Say what you mean. Mean what you say.",
     icon: "/img/bmh.png",
-    platforms: ["iOS", "Web", "Android"],
+    platforms: ["Web"], // Modified: Removed "iOS", "Android"
     category: "Social Media",
     status: "In Development",
-    links: {},
+    links: {}, // Modified: Removed appStore links
   },
 ];

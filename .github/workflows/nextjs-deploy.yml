@@ -40,8 +40,8 @@ jobs:
           # Directory where your built project (including .open-next) is located.
           # This should be the root of your Next.js project.
           workingDirectory: "./"
-          # Set the deploy script to use the OpenNext deploy command
-
           # For custom domains, ensure the CNAME record is configured in Cloudflare.
           # The wrangler-action will handle associating the deployment with the custom domain.
 
+      - name: Announce deployment
+        run: echo "🚀 Deployment successful: ${{ steps.deploy_step.outputs.url }}"

@@ -1,19 +1,20 @@
-"use client";
+import React from 'react';
 
 interface GlitchTextProps {
-  children: string;
-  as?: "h1" | "h2" | "h3" | "span";
+  as?: keyof JSX.IntrinsicElements; // e.g., 'h1', 'h2', 'p'
   className?: string;
+  children: React.ReactNode;
 }
 
-export default function GlitchText({
-  children,
-  as: Tag = "h2",
-  className = "",
-}: GlitchTextProps) {
+const GlitchText: React.FC<GlitchTextProps> = ({ as: Component = 'span', className, children }) => {
+  // Placeholder for a CSS-based glitch effect.
+  // Actual glitch effect would require specific CSS (e.g., keyframes, ::before/::after)
+  // and potentially JS for dynamic text manipulation.
   return (
-    <Tag className={`glitch-text ${className}`} data-text={children}>
+    <Component className={`glitch-text ${className || ''}`} data-text={children}>
       {children}
-    </Tag>
+    </Component>
   );
-}
+};
+
+export default GlitchText;
