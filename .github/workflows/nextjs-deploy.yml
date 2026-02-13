@@ -1,4 +1,4 @@
-name: Deploy Next.js to GitHub Pages
+name: Deploy Next.js to Cloudflare Pages
 
 on:
   push:
@@ -6,8 +6,14 @@ on:
       - main # Set a branch to deploy from
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write # Required for Wrangler action
+    environment:
+      name: production
+      url: ${{ steps.deploy_step.outputs.url }}
 
     steps:
       - name: Checkout
@@ -21,13 +27,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build with Next.js
+      - name: Build with Next.js and OpenNext
         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Publish to Cloudflare Pages
+        id: deploy_step
+        uses: cloudflare/wrangler-action@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          publish_branch: gh-pages # The branch to deploy to
-          cname: r0tten0x.dev # Your custom domain
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # The project name in Cloudflare Pages.
+          projectName: "your-cloudflare-pages-project-name" # <--- IMPORTANT: User needs to replace this
+          # Directory where your built project (including .open-next) is located.
+          # This should be the root of your Next.js project.
+          workingDirectory: "./"
+          # Set the deploy script to use the OpenNext deploy command
+          command: "npm run deploy"
+          # For custom domains, ensure the CNAME record is configured in Cloudflare.
+          # The wrangler-action will handle associating the deployment with the custom domain.
+
+      - name: Announce deployment
+        run: echo "🚀 Deployment successful: ${{ steps.deploy_step.outputs.url }}"
