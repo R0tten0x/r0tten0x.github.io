@@ -13,7 +13,6 @@ jobs:
       deployments: write # Required for Wrangler action
     environment:
       name: production
-      url: ${{ steps.deploy_step.outputs.url }}
 
     steps:
       - name: Checkout
@@ -42,7 +41,7 @@ jobs:
           # This should be the root of your Next.js project.
           workingDirectory: "./"
           # Set the deploy script to use the OpenNext deploy command
-          deployCommand: "npm run deploy"
+
           # For custom domains, ensure the CNAME record is configured in Cloudflare.
           # The wrangler-action will handle associating the deployment with the custom domain.
 
