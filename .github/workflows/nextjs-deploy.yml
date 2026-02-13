@@ -30,16 +30,11 @@ jobs:
         run: npm run build
 
       - name: Publish to Cloudflare Pages
-        id: deploy_step
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # The project name in Cloudflare Pages.
-          projectName: "your-cloudflare-pages-project-name" # <--- IMPORTANT: User needs to replace this
-          # Directory where your built project (including .open-next) is located.
-          # This should be the root of your Next.js project.
-          workingDirectory: "./"
-          # For custom domains, ensure the CNAME record is configured in Cloudflare.
-          # The wrangler-action will handle associating the deployment with the custom domain.
+        run: npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ 0d270922def9356a328a4c580abd0918 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ 639c711db2238d2d3bc59ade6ccb544e }}
+          CLOUDFLARE_PROJECT_NAME: "r0tten0x" # Pass project name as env var
 
+      - name: Announce deployment
+        run: echo "🚀 Deployment successful!"
