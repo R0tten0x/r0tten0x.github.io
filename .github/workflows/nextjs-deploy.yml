@@ -32,7 +32,7 @@ jobs:
       - name: Publish to Cloudflare Pages
         run: npm run deploy
         env:
-          CLOUDFLARE_API_TOKEN: ${{ 0d270922def9356a328a4c580abd0918 }}
+          CLOUDFLARE_API_TOKEN: ${{ YdPvE310iKX9sH7Rcx9Db1fuleZmQSbNISGL0JJt }}
           CLOUDFLARE_ACCOUNT_ID: ${{ 639c711db2238d2d3bc59ade6ccb544e }}
           CLOUDFLARE_PROJECT_NAME: "r0tten0x" # Pass project name as env var
 
