@@ -42,7 +42,7 @@ jobs:
           # This should be the root of your Next.js project.
           workingDirectory: "./"
           # Set the deploy script to use the OpenNext deploy command
-          command: "npm run deploy"
+          deployCommand: "npm run deploy"
           # For custom domains, ensure the CNAME record is configured in Cloudflare.
           # The wrangler-action will handle associating the deployment with the custom domain.
 
