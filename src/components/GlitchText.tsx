@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface GlitchTextProps {
-  as?: keyof JSX.IntrinsicElements; // e.g., 'h1', 'h2', 'p'
+  as?: keyof React.JSX.IntrinsicElements; // e.g., 'h1', 'h2', 'p'
   className?: string;
   children: React.ReactNode;
 }
