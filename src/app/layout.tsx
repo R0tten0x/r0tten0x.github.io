@@ -5,6 +5,8 @@ import "./globals.css";
 import ScanlineOverlay from "@/components/ScanlineOverlay";
 import NoiseTexture from "@/components/NoiseTexture";
 
+export const runtime = 'edge';
+
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
