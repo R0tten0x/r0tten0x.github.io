@@ -16,6 +16,12 @@ const projects = [
       "To empower residents with the ability to keep up to date on theft, sales, upcoming events, missing packages.",
     link: null,
   },
+  {
+    name: "FullStacked | Your only source for full-stack from A to Z",
+    description:
+    "Foundational to advanced concepts in full-stack development.",
+    link: "https://fullstacked.app"
+  },
 ];
 
 export default function Projects() {

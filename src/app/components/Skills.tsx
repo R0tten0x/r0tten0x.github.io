@@ -18,7 +18,7 @@ const skillCategories = [
   },
   {
     category: "Fullstack",
-    skills: ["Javascript", "HTML", "CSS", "Tailwind", "Next.js", "React"],
+    skills: ["Javascript", "HTML", "CSS", "Tailwind", "Next.js", "React", "SQL", "Postgres", "MongoDB"],
   },
 ];
 
