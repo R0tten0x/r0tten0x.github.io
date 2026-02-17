@@ -23,9 +23,9 @@ const projects = [
     link: "https://fullstacked.app"
   },
   { 
-    name: "ResumeFx | AI-Assisted Resume Building tool"
+    name: "ResumeFx | AI-Assisted Resume Building tool",
     description: 
-    "A modern resume builder that blends elegant design with AI guidance to help you craft a clear, confident story of your work—fast. Build resumes that sound like you at your best, not like a template."
+    "A modern resume builder that blends elegant design with AI guidance to help you craft a clear, confident story of your work—fast. Build resumes that sound like you at your best, not like a template.",
     link: "https://resumefx.app"
   },
 ];
