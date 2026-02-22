@@ -28,6 +28,13 @@ const projects = [
     "A modern resume builder that blends elegant design with AI guidance to help you craft a clear, confident story of your work—fast. Build resumes that sound like you at your best, not like a template.",
     link: "https://resumefx.app"
   },
+  {
+    name: "100 Days Of Javascript",
+    description: 
+    "Learn Javascript by writing it. Everyday.",
+    link: "https://100javascript.app"
+
+  }
 ];
 
 export default function Projects() {
