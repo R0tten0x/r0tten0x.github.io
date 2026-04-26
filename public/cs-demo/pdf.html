@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChargeShield — Evidence Packet</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #e5e7eb;
+      color: #111827;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Screen chrome */
+    .screen-bar {
+      background: #1a1a2e;
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .screen-bar a { color: #93c5fd; text-decoration: none; }
+    .screen-bar a:hover { text-decoration: underline; }
+    .screen-bar .print-btn {
+      margin-left: auto;
+      background: #1e40af;
+      color: #fff;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Paper */
+    .paper-wrap { padding: 32px 0 64px; display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .page {
+      width: 794px;
+      min-height: 1123px;
+      background: #fff;
+      padding: 56px 60px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    /* Header */
+    .pdf-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #1e40af;
+      margin-bottom: 28px;
+    }
+    .pdf-logo { display: flex; align-items: center; gap: 10px; }
+    .pdf-logo-icon { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .pdf-logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .pdf-logo-name { font-size: 20px; font-weight: 800; color: #1e40af; }
+    .pdf-logo-sub { font-size: 11px; color: #6b7280; margin-top: 1px; }
+    .pdf-meta { text-align: right; font-size: 11px; color: #6b7280; line-height: 1.8; }
+    .pdf-meta strong { color: #111827; font-size: 12px; }
+
+    /* Title block */
+    .pdf-title-block { margin-bottom: 24px; }
+    .pdf-title { font-size: 18px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+    .pdf-subtitle { font-size: 12px; color: #6b7280; }
+
+    /* Status row */
+    .status-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .pill-red    { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .pill-green  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .pill-blue   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .pill-yellow { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+    /* Section heading */
+    .sec { margin-bottom: 22px; }
+    .sec-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #1e40af;
+      border-bottom: 1px solid #bfdbfe;
+      padding-bottom: 5px;
+      margin-bottom: 14px;
+    }
+
+    /* Grid */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .field { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px 12px; }
+    .field-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #9ca3af; margin-bottom: 3px; }
+    .field-value { font-size: 13px; font-weight: 600; color: #111827; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px; }
+    thead tr { background: #f3f4f6; }
+    th { padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; border-bottom: 1px solid #e5e7eb; }
+    th.r { text-align: right; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; }
+    td.r { text-align: right; }
+    td.mono { font-family: 'Courier New', monospace; font-size: 11px; }
+    tr.total-row td { font-weight: 700; border-top: 1px solid #e5e7eb; border-bottom: none; }
+
+    /* Risk table */
+    .risk-high   { background: #fef2f2; color: #dc2626; }
+    .risk-medium { background: #fffbeb; color: #92400e; }
+    .risk-low    { background: #f0fdf4; color: #16a34a; }
+    .risk-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 10px; }
+
+    /* Tracking box */
+    .tracking-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .tracking-num { font-family: 'Courier New', monospace; font-size: 14px; font-weight: 700; color: #1e40af; }
+    .tracking-label { font-size: 10px; color: #6b7280; margin-bottom: 2px; }
+
+    /* Footer */
+    .pdf-footer {
+      position: absolute;
+      bottom: 32px;
+      left: 60px;
+      right: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 10px;
+    }
+
+    /* Attestation box */
+    .attestation {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 4px;
+    }
+    .attestation-title { font-weight: 700; color: #166534; margin-bottom: 6px; font-size: 13px; }
+    .attestation-body  { font-size: 12px; color: #166534; line-height: 1.7; }
+
+    @media print {
+      .screen-bar { display: none; }
+      body { background: #fff; }
+      .paper-wrap { padding: 0; }
+      .page { box-shadow: none; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="screen-bar">
+    <a href="javascript:history.back()">← Back</a>
+    <span>ChargeShield — Evidence Packet (PDF Preview)</span>
+    <button class="print-btn" onclick="window.print()">⎙ Print / Save as PDF</button>
+  </div>
+
+  <div class="paper-wrap" id="paper"></div>
+
+  <script>
+    const nowMs = Date.now();
+    const addDays = n => { const d = new Date(nowMs); d.setDate(d.getDate() + n); return d; };
+    const fmtDate = d => new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    const fmtDateShort = d => new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    const fmtCurrency = (n, c) => new Intl.NumberFormat('en-US', { style:'currency', currency: c }).format(n);
+    const generatedAt = new Date().toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' });
+
+    const PACKETS = {
+      '1003': {
+        order: '#1003', disputeId: 'D-SYN-003', status: 'needs_response',
+        reason: 'Subscription Cancelled', networkReason: '13.6 — Credit not processed',
+        amount: 499.95, currency: 'USD',
+        dueAt: addDays(11), createdAt: addDays(-8),
+        customer: { name: 'Derek Chen', email: 'derek.chen@company.io', phone: '+1 (415) 555-0174', orders: 2, spent: '$999.90', verified: true, since: addDays(-380) },
+        lineItems: [{ name: 'Annual SaaS License', variant: 'Pro Plan – 12 Months', sku: 'LIC-PRO-12M', qty: 1, price: 499.95 }],
+        fulfillment: null,
+        billing: { name:'Derek Chen', addr:'1001 Market St, Ste 400', city:'San Francisco, CA 94103', country:'United States' },
+        shipping: null,
+        risks: [{ cause:'Chargeback History', score:'30', level:'low', msg:'No prior chargebacks on account' }],
+        notes: 'This is a digital subscription product (SaaS). No physical fulfillment applies. The subscription terms were accepted at checkout. No cancellation request was received prior to the dispute. Access was granted immediately upon payment.',
+      },
+      '1004': {
+        order: '#1004', disputeId: 'D-SYN-004', status: 'won',
+        reason: 'Credit Not Processed', networkReason: '13.6 — Credit not processed',
+        amount: 59.99, currency: 'USD',
+        dueAt: addDays(-12), createdAt: addDays(-45),
+        customer: { name: 'Sarah Kim', email: 'sarah.k@icloud.com', phone: '+1 (206) 555-0133', orders: 12, spent: '$1,204.80', verified: true, since: addDays(-720) },
+        lineItems: [{ name: 'Leather Phone Wallet Case', variant: 'iPhone 15 / Tan', sku: 'CASE-IPH15-TAN', qty: 1, price: 59.99 }],
+        fulfillment: { tracking: '7489044300241912345', carrier: 'FedEx', status: 'Delivered', date: addDays(-58) },
+        billing: { name:'Sarah Kim', addr:'22 Oak Dr', city:'Seattle, WA 98101', country:'United States' },
+        shipping: { name:'Sarah Kim', addr:'22 Oak Dr', city:'Seattle, WA 98101', country:'United States' },
+        risks: [
+          { cause:'IP Address', score:'12', level:'low', msg:'IP consistently matches customer billing region' },
+          { cause:'Order History', score:'8', level:'low', msg:'12 orders, zero prior disputes, long-standing customer' },
+        ],
+        notes: 'Customer claimed credit was not processed. Our records show a single $59.99 charge on the order date with no refund requested prior to the dispute. The item was delivered 3 days after purchase. No return or refund request was made through our support channels.',
+      },
+    };
+
+    function riskRow(r) {
+      return `<tr>
+        <td style="font-weight:600;text-transform:capitalize">${r.cause}</td>
+        <td style="text-align:center;font-weight:700">${r.score}</td>
+        <td><span class="risk-pill risk-${r.level}">${r.level.toUpperCase()}</span></td>
+        <td style="color:#6b7280">${r.msg}</td>
+      </tr>`;
+    }
+
+    function renderPacket(p) {
+      const statusColor = { needs_response:'red', won:'green', lost:'red', under_review:'yellow' }[p.status] || 'blue';
+      const total = p.lineItems.reduce((s,i) => s + i.price * i.qty, 0);
+
+      const fulfillSection = p.fulfillment ? `
+        <div class="sec">
+          <div class="sec-title">Shipping &amp; Fulfillment</div>
+          <div class="tracking-box">
+            <div class="tracking-label">Tracking Number</div>
+            <div class="tracking-num">${p.fulfillment.tracking}</div>
+          </div>
+          <div class="grid3">
+            <div class="field"><div class="field-label">Carrier</div><div class="field-value">${p.fulfillment.carrier}</div></div>
+            <div class="field"><div class="field-label">Delivery Status</div><div class="field-value">${p.fulfillment.status}</div></div>
+            <div class="field"><div class="field-label">Fulfilled Date</div><div class="field-value">${fmtDateShort(p.fulfillment.date)}</div></div>
+          </div>
+        </div>` : `
+        <div class="sec">
+          <div class="sec-title">Shipping &amp; Fulfillment</div>
+          <p style="font-size:12px;color:#6b7280;font-style:italic">Digital product — no physical fulfillment.</p>
+        </div>`;
+
+      const addrSection = (p.billing || p.shipping) ? `
+        <div class="sec">
+          <div class="sec-title">Addresses</div>
+          <div class="grid2">
+            ${p.billing ? `<div class="field"><div class="field-label">Billing Address</div><div class="field-value" style="font-weight:400;line-height:1.8">${p.billing.name}<br>${p.billing.addr}<br>${p.billing.city}<br>${p.billing.country}</div></div>` : ''}
+            ${p.shipping ? `<div class="field"><div class="field-label">Shipping Address</div><div class="field-value" style="font-weight:400;line-height:1.8">${p.shipping.name}<br>${p.shipping.addr}<br>${p.shipping.city}<br>${p.shipping.country}</div></div>` : ''}
+          </div>
+        </div>` : '';
+
+      return `
+        <div class="page">
+          <!-- Header -->
+          <div class="pdf-header">
+            <div class="pdf-logo">
+              <div class="pdf-logo-icon"><img src="logo.svg" alt="ChargeShield" /></div>
+              <div>
+                <div class="pdf-logo-name">ChargeShield</div>
+                <div class="pdf-logo-sub">Automated Dispute Evidence Packet</div>
+              </div>
+            </div>
+            <div class="pdf-meta">
+              <strong>Packet ID: CS-${p.disputeId}</strong><br>
+              Generated: ${generatedAt}<br>
+              Merchant: demo-merchant.myshopify.com<br>
+              Confidential — for chargeback response only
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="pdf-title-block">
+            <div class="pdf-title">Evidence Packet — Order ${p.order}</div>
+            <div class="pdf-subtitle">Dispute #${p.disputeId} &nbsp;·&nbsp; ${p.reason} &nbsp;·&nbsp; ${p.networkReason}</div>
+          </div>
+
+          <!-- Status pills -->
+          <div class="status-row">
+            <span class="pill pill-${statusColor}">${p.status.replace(/_/g,' ')}</span>
+            <span class="pill pill-blue">Due: ${fmtDate(p.dueAt)}</span>
+            <span class="pill pill-red">Amount: ${fmtCurrency(p.amount, p.currency)}</span>
+            <span class="pill pill-yellow">Filed: ${fmtDateShort(p.createdAt)}</span>
+          </div>
+
+          <!-- Merchant summary -->
+          <div class="sec">
+            <div class="sec-title">Dispute Summary</div>
+            <div class="grid3">
+              <div class="field"><div class="field-label">Dispute ID</div><div class="field-value">${p.disputeId}</div></div>
+              <div class="field"><div class="field-label">Order</div><div class="field-value">${p.order}</div></div>
+              <div class="field"><div class="field-label">Amount at Risk</div><div class="field-value">${fmtCurrency(p.amount, p.currency)}</div></div>
+              <div class="field"><div class="field-label">Dispute Reason</div><div class="field-value">${p.reason}</div></div>
+              <div class="field"><div class="field-label">Network Code</div><div class="field-value">${p.networkReason}</div></div>
+              <div class="field"><div class="field-label">Response Due</div><div class="field-value">${fmtDate(p.dueAt)}</div></div>
+            </div>
+          </div>
+
+          <!-- Order proof -->
+          <div class="sec">
+            <div class="sec-title">Order Proof</div>
+            <table>
+              <thead><tr>
+                <th>Item</th><th>SKU</th><th class="r">Qty</th><th class="r">Unit Price</th><th class="r">Total</th>
+              </tr></thead>
+              <tbody>
+                ${p.lineItems.map(i => `<tr>
+                  <td><strong>${i.name}</strong>${i.variant ? `<br><span style="font-size:11px;color:#6b7280">${i.variant}</span>` : ''}</td>
+                  <td class="mono">${i.sku}</td>
+                  <td class="r">${i.qty}</td>
+                  <td class="r">${fmtCurrency(i.price, p.currency)}</td>
+                  <td class="r">${fmtCurrency(i.price * i.qty, p.currency)}</td>
+                </tr>`).join('')}
+                <tr class="total-row">
+                  <td colspan="4" style="text-align:right;color:#6b7280">Order Total</td>
+                  <td class="r">${fmtCurrency(total, p.currency)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          ${fulfillSection}
+          ${addrSection}
+
+          <!-- Customer -->
+          <div class="sec">
+            <div class="sec-title">Customer History</div>
+            <div class="grid3">
+              <div class="field"><div class="field-label">Name</div><div class="field-value">${p.customer.name}</div></div>
+              <div class="field"><div class="field-label">Email</div><div class="field-value">${p.customer.email}</div></div>
+              <div class="field"><div class="field-label">Phone</div><div class="field-value">${p.customer.phone}</div></div>
+              <div class="field"><div class="field-label">Total Orders</div><div class="field-value">${p.customer.orders}</div></div>
+              <div class="field"><div class="field-label">Lifetime Spend</div><div class="field-value">${p.customer.spent}</div></div>
+              <div class="field"><div class="field-label">Verified Email</div><div class="field-value">${p.customer.verified ? '✓ Yes' : '✗ No'}</div></div>
+            </div>
+          </div>
+
+          <!-- Fraud signals -->
+          <div class="sec">
+            <div class="sec-title">Fraud Risk Assessment</div>
+            <table>
+              <thead><tr><th>Indicator</th><th style="text-align:center">Score</th><th>Level</th><th>Notes</th></tr></thead>
+              <tbody>${p.risks.map(riskRow).join('')}</tbody>
+            </table>
+          </div>
+
+          <!-- Merchant notes -->
+          <div class="sec">
+            <div class="sec-title">Merchant Statement</div>
+            <p style="font-size:12px;color:#374151;line-height:1.8">${p.notes}</p>
+          </div>
+
+          <!-- Attestation -->
+          <div class="attestation">
+            <div class="attestation-title">✓ Merchant Attestation</div>
+            <div class="attestation-body">
+              I, the merchant of record for demo-merchant.myshopify.com, attest that the information contained in this evidence packet is accurate and complete to the best of my knowledge. This evidence was compiled automatically by ChargeShield on ${generatedAt} from order, fulfillment, and customer records at the time of dispute.
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="pdf-footer">
+            <span>ChargeShield &mdash; Automated Evidence &mdash; ${p.disputeId}</span>
+            <span>Generated ${generatedAt}</span>
+            <span>Page 1 of 1</span>
+          </div>
+        </div>
+      `;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || '1004';
+    const packet = PACKETS[id];
+
+    if (packet) {
+      document.title = `ChargeShield — Evidence Packet ${packet.disputeId}`;
+      document.getElementById('paper').innerHTML = renderPacket(packet);
+    } else {
+      document.getElementById('paper').innerHTML = '<p style="padding:40px;color:#6b7280">Packet not found.</p>';
+    }
+  </script>
+</body>
+</html>

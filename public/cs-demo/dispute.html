@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChargeShield — Evidence Viewer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f6f7;
+      color: #202223;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Mock Shopify top bar ── */
+    .topbar {
+      background: #1a1a2e;
+      color: #fff;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .topbar-logo .shield {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar-logo .shield img { width: 100%; height: 100%; object-fit: contain; }
+    .topbar-store { margin-left: auto; font-size: 13px; color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.07); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); }
+    .demo-badge { background: #f59e0b; color: #78350f; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 4px; }
+
+    /* ── Page ── */
+    .page { max-width: 880px; margin: 0 auto; padding: 28px 24px 48px; }
+
+    .back-btn {
+      background: none; border: none; cursor: pointer;
+      color: #6b7280; font-size: 14px; margin-bottom: 20px; padding: 0;
+      display: flex; align-items: center; gap: 6px;
+      text-decoration: none;
+    }
+    .back-btn:hover { color: #111827; }
+
+    /* ── Header card ── */
+    .header-card {
+      background: #fff;
+      border: 1px solid #e1e3e5;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .order-title { font-size: 22px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .order-sub { font-size: 13px; color: #6b7280; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .stat-tile { background: #f9fafb; border-radius: 8px; padding: 12px 14px; }
+    .stat-tile.critical-bg { background: #fef2f2; }
+    .stat-tile.caution-bg  { background: #fffbeb; }
+    .tile-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #9ca3af; margin-bottom: 4px; }
+    .tile-value { font-size: 18px; font-weight: 800; color: #111827; }
+    .tile-value.critical { color: #dc2626; }
+    .tile-value.caution  { color: #d97706; }
+    .tile-sub { display: block; font-size: 12px; font-weight: 400; color: #6b7280; margin-top: 2px; }
+
+    .btn-primary { background: #1e40af; color: #fff; font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-pending { font-size: 13px; color: #9ca3af; background: #f9fafb; border: 1px solid #e1e3e5; border-radius: 8px; padding: 10px 16px; }
+
+    /* ── Collapsible sections ── */
+    .section { border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 14px; overflow: hidden; background: #fff; }
+    .section-toggle {
+      width: 100%; display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: #f9fafb;
+      border: none; border-bottom: 1px solid #e5e7eb;
+      cursor: pointer; text-align: left;
+    }
+    .section-toggle.closed { background: #fff; border-bottom: none; }
+    .section-accent { width: 3px; height: 18px; background: #1e40af; border-radius: 2px; flex-shrink: 0; }
+    .section-title { flex: 1; font-weight: 700; font-size: 15px; color: #111827; }
+    .section-chevron { font-size: 14px; color: #9ca3af; }
+    .section-body { padding: 20px; display: none; }
+    .section-body.open { display: block; }
+
+    /* ── KV Grid ── */
+    .kv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .kv-tile { background: #f9fafb; border-radius: 8px; padding: 12px 14px; }
+    .kv-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #9ca3af; margin-bottom: 4px; }
+    .kv-value { font-size: 14px; font-weight: 600; color: #111827; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 16px; }
+    thead tr { background: #f9fafb; }
+    th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; border-bottom: 1px solid #e5e7eb; }
+    th.right { text-align: right; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+    td.right { text-align: right; }
+    td.mono { font-family: monospace; font-size: 12px; color: #6b7280; }
+
+    /* ── Tracking box ── */
+    .tracking-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .tracking-label { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+    .tracking-num { font-family: monospace; font-size: 16px; font-weight: 700; color: #1e40af; }
+    .tracking-link { font-size: 12px; color: #1e40af; margin-top: 4px; display: inline-block; }
+
+    /* ── Address blocks ── */
+    .address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    @media (max-width: 500px) { .address-grid { grid-template-columns: 1fr; } }
+    .address-block { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+    .address-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #6b7280; margin-bottom: 8px; }
+    .address-text { font-size: 13px; color: #374151; line-height: 1.7; }
+
+    /* ── Risk table level badges ── */
+    .risk-high   { background: #fef2f2; color: #dc2626; }
+    .risk-medium { background: #fffbeb; color: #92400e; }
+    .risk-low    { background: #f0fdf4; color: #16a34a; }
+    .risk-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 20px; }
+
+    /* ── Badges (shared) ── */
+    .badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 3px 10px; border-radius: 20px; }
+    .badge-critical { background: #fef2f2; color: #dc2626; }
+    .badge-success  { background: #f0fdf4; color: #16a34a; }
+    .badge-caution  { background: #fffbeb; color: #92400e; }
+    .badge-info     { background: #eff6ff; color: #1d4ed8; }
+    .badge-subdued  { background: #f3f4f6; color: #6b7280; }
+
+    /* ── Notice ── */
+    .notice { background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #78350f; margin-top: 14px; }
+  </style>
+</head>
+<body>
+
+  <nav class="topbar">
+    <a class="topbar-logo" href="index.html">
+      <div class="shield"><img src="logo.svg" alt="ChargeShield" /></div>
+      ChargeShield
+    </a>
+    <span class="demo-badge">Demo</span>
+    <div class="topbar-store">demo-merchant.myshopify.com</div>
+  </nav>
+
+  <main class="page">
+    <a href="index.html" class="back-btn">← Back to Disputes</a>
+    <div id="content"></div>
+  </main>
+
+  <script>
+    const nowMs = Date.now();
+    const addDays = n => { const d = new Date(nowMs); d.setDate(d.getDate() + n); return d; };
+    const fmtDate = d => new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    const fmtDateShort = d => new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    const fmtCurrency = (n, c) => new Intl.NumberFormat('en-US', { style:'currency', currency: c }).format(n);
+    const daysLeft = d => Math.ceil((new Date(d).getTime() - nowMs) / 86400000);
+
+    const EVIDENCE = {
+      '1001': {
+        disputeId: 'D-SYN-001',
+        order: '#1001',
+        status: 'needs_response',
+        reason: 'fraudulent',
+        amount: 149.99,
+        currency: 'USD',
+        dueAt: addDays(2),
+        createdAt: addDays(-14),
+        networkReason: '10.4 — Card-absent fraud',
+        hasPdf: false,
+        order_details: {
+          name: '#1001',
+          created_at: addDays(-14).toISOString(),
+          total_price: '149.99',
+          currency: 'USD',
+          financial_status: 'paid',
+          fulfillment_status: 'fulfilled',
+          email: 'a.johnson@gmail.com',
+          line_items: [
+            { title: 'Premium Wireless Headphones', variant_title: 'Matte Black', sku: 'WH-PRO-BLK', quantity: 1, price: '149.99' },
+          ],
+          billing_address: { name:'Alex Johnson', address1:'123 Main St', city:'Los Angeles', province:'CA', zip:'90210', country:'United States' },
+          shipping_address: { name:'Alex Johnson', address1:'456 Elm Ave', city:'Chicago', province:'IL', zip:'60601', country:'United States' },
+        },
+        fulfillments: [
+          { tracking_number: '1Z999AA10123456784', tracking_company: 'UPS', tracking_url: '#', shipment_status: 'delivered', created_at: addDays(-12).toISOString() },
+        ],
+        customer: {
+          first_name:'Alex', last_name:'Johnson', email:'a.johnson@gmail.com',
+          phone:'+1 (310) 555-0142', orders_count: 3, total_spent: '512.47',
+          currency:'USD', verified_email: true, created_at: addDays(-180).toISOString(),
+        },
+        risks: [
+          { cause:'ip_address', score:'72', level:'high',   message:'IP located in high-fraud region, mismatched billing country' },
+          { cause:'avs_mismatch', score:'45', level:'medium', message:'Billing ZIP does not match card issuer records' },
+          { cause:'cvv',         score:'10', level:'low',    message:'CVV verified' },
+        ],
+      },
+      '1002': {
+        disputeId: 'D-SYN-002',
+        order: '#1002',
+        status: 'needs_response',
+        reason: 'product_not_received',
+        amount: 89.50,
+        currency: 'USD',
+        dueAt: addDays(5),
+        createdAt: addDays(-10),
+        networkReason: '13.1 — Merchandise / services not received',
+        hasPdf: false,
+        order_details: {
+          name: '#1002',
+          created_at: addDays(-18).toISOString(),
+          total_price: '89.50',
+          currency: 'USD',
+          financial_status: 'paid',
+          fulfillment_status: 'fulfilled',
+          email: 'mwilliams@outlook.com',
+          line_items: [
+            { title: 'Organic Skincare Bundle', variant_title: 'Sensitive Skin', sku: 'SKN-ORG-S', quantity: 1, price: '89.50' },
+          ],
+          billing_address: { name:'Maria Williams', address1:'78 Birch Lane', city:'Austin', province:'TX', zip:'78701', country:'United States' },
+          shipping_address: { name:'Maria Williams', address1:'78 Birch Lane', city:'Austin', province:'TX', zip:'78701', country:'United States' },
+        },
+        fulfillments: [
+          { tracking_number: '9400111899223397988332', tracking_company: 'USPS', tracking_url: '#', shipment_status: 'delivered', created_at: addDays(-15).toISOString() },
+        ],
+        customer: {
+          first_name:'Maria', last_name:'Williams', email:'mwilliams@outlook.com',
+          phone:'+1 (512) 555-0198', orders_count: 7, total_spent: '634.20',
+          currency:'USD', verified_email: true, created_at: addDays(-420).toISOString(),
+        },
+        risks: [
+          { cause:'order_history', score:'15', level:'low', message:'Customer has 7 prior orders with no previous disputes' },
+          { cause:'ip_address',    score:'20', level:'low', message:'IP matches billing and shipping region' },
+        ],
+      },
+      '1003': {
+        disputeId: 'D-SYN-003',
+        order: '#1003',
+        status: 'needs_response',
+        reason: 'subscription_cancelled',
+        amount: 499.95,
+        currency: 'USD',
+        dueAt: addDays(11),
+        createdAt: addDays(-8),
+        networkReason: '13.6 — Credit not processed',
+        hasPdf: true,
+        pdfUrl: 'pdf.html?id=1003',
+        order_details: {
+          name: '#1003',
+          created_at: addDays(-8).toISOString(),
+          total_price: '499.95',
+          currency: 'USD',
+          financial_status: 'paid',
+          fulfillment_status: 'fulfilled',
+          email: 'derek.chen@company.io',
+          line_items: [
+            { title: 'Annual SaaS License', variant_title: 'Pro Plan – 12 Months', sku: 'LIC-PRO-12M', quantity: 1, price: '499.95' },
+          ],
+          billing_address: { name:'Derek Chen', address1:'1001 Market St', address2:'Ste 400', city:'San Francisco', province:'CA', zip:'94103', country:'United States' },
+          shipping_address: null,
+        },
+        fulfillments: [],
+        customer: {
+          first_name:'Derek', last_name:'Chen', email:'derek.chen@company.io',
+          phone:'+1 (415) 555-0174', orders_count: 2, total_spent: '999.90',
+          currency:'USD', verified_email: true, created_at: addDays(-380).toISOString(),
+        },
+        risks: [
+          { cause:'chargeback_history', score:'30', level:'low', message:'No prior chargebacks on this account' },
+        ],
+      },
+      '1004': {
+        disputeId: 'D-SYN-004',
+        order: '#1004',
+        status: 'won',
+        reason: 'credit_not_processed',
+        amount: 59.99,
+        currency: 'USD',
+        dueAt: addDays(-12),
+        createdAt: addDays(-45),
+        networkReason: '13.6 — Credit not processed',
+        hasPdf: true,
+        pdfUrl: 'pdf.html?id=1004',
+        order_details: {
+          name: '#1004',
+          created_at: addDays(-60).toISOString(),
+          total_price: '59.99',
+          currency: 'USD',
+          financial_status: 'paid',
+          fulfillment_status: 'fulfilled',
+          email: 'sarah.k@icloud.com',
+          line_items: [
+            { title: 'Leather Phone Wallet Case', variant_title: 'iPhone 15 / Tan', sku: 'CASE-IPH15-TAN', quantity: 1, price: '59.99' },
+          ],
+          billing_address: { name:'Sarah Kim', address1:'22 Oak Dr', city:'Seattle', province:'WA', zip:'98101', country:'United States' },
+          shipping_address: { name:'Sarah Kim', address1:'22 Oak Dr', city:'Seattle', province:'WA', zip:'98101', country:'United States' },
+        },
+        fulfillments: [
+          { tracking_number: '7489044300241912345', tracking_company: 'FedEx', tracking_url: '#', shipment_status: 'delivered', created_at: addDays(-58).toISOString() },
+        ],
+        customer: {
+          first_name:'Sarah', last_name:'Kim', email:'sarah.k@icloud.com',
+          phone:'+1 (206) 555-0133', orders_count: 12, total_spent: '1204.80',
+          currency:'USD', verified_email: true, created_at: addDays(-720).toISOString(),
+        },
+        risks: [
+          { cause:'ip_address',    score:'12', level:'low', message:'IP matches customer billing region consistently' },
+          { cause:'order_history', score:'8',  level:'low', message:'Long-standing customer, 12 orders, zero prior disputes' },
+        ],
+      },
+      '1005': {
+        disputeId: 'D-SYN-005',
+        order: '#1005',
+        status: 'lost',
+        reason: 'fraudulent',
+        amount: 214.00,
+        currency: 'USD',
+        dueAt: addDays(-7),
+        createdAt: addDays(-30),
+        networkReason: '10.4 — Card-absent fraud',
+        hasPdf: false,
+        order_details: {
+          name: '#1005',
+          created_at: addDays(-38).toISOString(),
+          total_price: '214.00',
+          currency: 'USD',
+          financial_status: 'paid',
+          fulfillment_status: 'fulfilled',
+          email: 'guest2837@noemail.net',
+          line_items: [
+            { title: 'Smart Home Hub', variant_title: 'White', sku: 'HUB-SMT-W', quantity: 1, price: '149.00' },
+            { title: 'Smart Plug Pack (4x)', variant_title: null, sku: 'PLUG-4PK', quantity: 1, price: '65.00' },
+          ],
+          billing_address: { name:'John Guest', address1:'999 Fake St', city:'Miami', province:'FL', zip:'33101', country:'United States' },
+          shipping_address: { name:'John Guest', address1:'999 Fake St', city:'Miami', province:'FL', zip:'33101', country:'United States' },
+        },
+        fulfillments: [
+          { tracking_number: '1ZX29W016781234560', tracking_company: 'UPS', tracking_url: '#', shipment_status: 'delivered', created_at: addDays(-36).toISOString() },
+        ],
+        customer: {
+          first_name:'John', last_name:'Guest', email:'guest2837@noemail.net',
+          phone: null, orders_count: 1, total_spent: '214.00',
+          currency:'USD', verified_email: false, created_at: addDays(-39).toISOString(),
+        },
+        risks: [
+          { cause:'ip_address',        score:'88', level:'high',   message:'Proxy/VPN detected; IP flagged in fraud database' },
+          { cause:'avs_mismatch',      score:'70', level:'high',   message:'Billing address not matched by card issuer' },
+          { cause:'guest_checkout',    score:'55', level:'medium', message:'Guest checkout, unverified email, no order history' },
+          { cause:'device_fingerprint',score:'50', level:'medium', message:'Device fingerprint linked to prior fraud reports' },
+        ],
+      },
+    };
+
+    function statusBadge(status) {
+      const map = { needs_response:['Needs Response','critical'], under_review:['Under Review','caution'], won:['Won','success'], lost:['Lost','critical'], accepted:['Accepted','caution'], charge_refunded:['Refunded','caution'], expired:['Expired','subdued'] };
+      const [label, tone] = map[status] ?? [status,'subdued'];
+      return `<span class="badge badge-${tone}">${label}</span>`;
+    }
+
+    function renderDaysLeft(dl, dueAt) {
+      const cls = dl <= 3 && dl > 0 ? 'critical' : dl <= 7 && dl > 0 ? 'caution' : '';
+      const bg  = dl <= 3 && dl > 0 ? 'critical-bg' : dl <= 7 && dl > 0 ? 'caution-bg' : '';
+      const label = dl <= 0 ? 'Overdue' : `${dl}d left`;
+      return `<div class="stat-tile ${bg}">
+        <div class="tile-label">Evidence Due</div>
+        <div class="tile-value ${cls}">${label}<span class="tile-sub">${fmtDate(dueAt)}</span></div>
+      </div>`;
+    }
+
+    function collapseToggle(id, defaultOpen) {
+      const body = document.getElementById(id);
+      const btn  = document.getElementById('btn-' + id);
+      if (!body || !btn) return;
+      if (defaultOpen) { body.classList.add('open'); btn.classList.remove('closed'); }
+      btn.addEventListener('click', () => {
+        const isOpen = body.classList.toggle('open');
+        btn.classList.toggle('closed', !isOpen);
+        btn.querySelector('.section-chevron').textContent = isOpen ? '▲' : '▼';
+      });
+    }
+
+    function riskBadge(level) {
+      return `<span class="risk-badge risk-${level}">${level.toUpperCase()}</span>`;
+    }
+
+    function renderPage(data) {
+      const dl = daysLeft(data.dueAt);
+      const order = data.order_details || {};
+      const lineItems = order.line_items || [];
+      const billing = order.billing_address;
+      const shipping = order.shipping_address;
+      const fulfillments = data.fulfillments || [];
+      const customer = data.customer;
+      const risks = data.risks || [];
+
+      const highestRisk = risks.reduce((max, r) => {
+        const lvl = { low:0, medium:1, high:2 };
+        return (lvl[r.level] ?? 0) > (lvl[max] ?? 0) ? r.level : max;
+      }, 'low');
+
+      const pdfBtn = data.hasPdf && data.pdfUrl
+        ? `<a href="${data.pdfUrl}" target="_blank" class="btn-primary">↓ Download PDF</a>`
+        : `<span class="btn-pending">PDF generating…</span>`;
+
+      const addressBlocks = [billing, shipping].filter(Boolean);
+      const addrHTML = addressBlocks.length ? `
+        <div class="address-grid">
+          ${billing ? `<div class="address-block"><div class="address-label">Billing Address</div><div class="address-text">${billing.name}<br>${billing.address1}${billing.address2 ? ', '+billing.address2 : ''}<br>${billing.city}, ${billing.province} ${billing.zip}<br>${billing.country}</div></div>` : ''}
+          ${shipping ? `<div class="address-block"><div class="address-label">Shipping Address</div><div class="address-text">${shipping.name}<br>${shipping.address1}${shipping.address2 ? ', '+shipping.address2 : ''}<br>${shipping.city}, ${shipping.province} ${shipping.zip}<br>${shipping.country}</div></div>` : ''}
+        </div>` : '';
+
+      const lineItemsHTML = lineItems.length ? `
+        <table style="margin-top:16px">
+          <thead><tr>
+            <th>Item</th><th>SKU</th><th class="right">Qty</th><th class="right">Unit Price</th><th class="right">Total</th>
+          </tr></thead>
+          <tbody>${lineItems.map(item => `
+            <tr>
+              <td><div style="font-weight:600">${item.title}</div>${item.variant_title ? `<div style="font-size:12px;color:#6b7280">${item.variant_title}</div>` : ''}</td>
+              <td class="mono">${item.sku || '—'}</td>
+              <td class="right">${item.quantity}</td>
+              <td class="right">${order.currency} ${Number(item.price).toFixed(2)}</td>
+              <td class="right" style="font-weight:600">${order.currency} ${(Number(item.price) * item.quantity).toFixed(2)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>` : '';
+
+      const fulfillHTML = fulfillments.length ? fulfillments.map(f => {
+        const nums = f.tracking_numbers?.length ? f.tracking_numbers : f.tracking_number ? [f.tracking_number] : [];
+        return nums.map(num => `
+          <div class="tracking-box">
+            <div class="tracking-label">Tracking Number</div>
+            <div class="tracking-num">${num}</div>
+            ${f.tracking_url && f.tracking_url !== '#' ? `<a href="${f.tracking_url}" target="_blank" class="tracking-link">Track package →</a>` : ''}
+          </div>`).join('')
+          + `<div class="kv-grid" style="margin-top:8px">
+            <div class="kv-tile"><div class="kv-label">Carrier</div><div class="kv-value">${f.tracking_company || '—'}</div></div>
+            <div class="kv-tile"><div class="kv-label">Status</div><div class="kv-value">${(f.shipment_status || f.status || '—').replace(/_/g,' ')}</div></div>
+            <div class="kv-tile"><div class="kv-label">Fulfilled At</div><div class="kv-value">${f.created_at ? fmtDateShort(f.created_at) : '—'}</div></div>
+          </div>`;
+      }).join('<hr style="border:none;border-top:1px solid #f3f4f6;margin:20px 0">') : '<p style="color:#9ca3af;font-style:italic">No fulfillment records found for this order.</p>';
+
+      const customerHTML = customer ? `
+        <div class="kv-grid">
+          <div class="kv-tile"><div class="kv-label">Name</div><div class="kv-value">${customer.first_name} ${customer.last_name}</div></div>
+          <div class="kv-tile"><div class="kv-label">Email</div><div class="kv-value">${customer.email}</div></div>
+          <div class="kv-tile"><div class="kv-label">Phone</div><div class="kv-value">${customer.phone || '—'}</div></div>
+          <div class="kv-tile"><div class="kv-label">Total Orders</div><div class="kv-value">${customer.orders_count}</div></div>
+          <div class="kv-tile"><div class="kv-label">Lifetime Spend</div><div class="kv-value">${customer.currency} ${customer.total_spent}</div></div>
+          <div class="kv-tile"><div class="kv-label">Verified Email</div><div class="kv-value">${customer.verified_email ? '✓ Yes' : '✗ No'}</div></div>
+          <div class="kv-tile"><div class="kv-label">Customer Since</div><div class="kv-value">${fmtDate(customer.created_at)}</div></div>
+        </div>
+        <div class="notice">Full order history requires Shopify protected customer data approval.</div>` : '<p style="color:#9ca3af;font-style:italic">Customer data not available.</p>';
+
+      const riskColor = { high:'red', medium:'yellow', low:'green' }[highestRisk];
+      const riskBadgeEl = `<span class="badge badge-${riskColor === 'red' ? 'critical' : riskColor === 'yellow' ? 'caution' : 'success'}">${highestRisk.toUpperCase()}</span>`;
+
+      const risksHTML = risks.length ? `
+        <table>
+          <thead><tr>
+            <th>Indicator</th><th>Score</th><th>Level</th><th>Message</th>
+          </tr></thead>
+          <tbody>${risks.map(r => `
+            <tr>
+              <td style="font-weight:600;text-transform:capitalize">${r.cause.replace(/_/g,' ')}</td>
+              <td style="font-weight:700;text-align:center">${r.score}</td>
+              <td>${riskBadge(r.level)}</td>
+              <td style="color:#6b7280">${r.message}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>` : '<p style="color:#9ca3af;font-style:italic">No fraud risk indicators.</p>';
+
+      document.getElementById('content').innerHTML = `
+        <!-- Header card -->
+        <div class="header-card">
+          <div class="header-top">
+            <div>
+              <div class="order-title">Order ${data.order} ${statusBadge(data.status)}</div>
+              <div class="order-sub">Dispute #${data.disputeId} &nbsp;·&nbsp; ${data.reason.replace(/_/g,' ')}</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${pdfBtn}</div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-tile">
+              <div class="tile-label">Amount</div>
+              <div class="tile-value">${fmtCurrency(data.amount, data.currency)}</div>
+            </div>
+            ${renderDaysLeft(dl, data.dueAt)}
+            <div class="stat-tile">
+              <div class="tile-label">Filed</div>
+              <div class="tile-value" style="font-size:14px">${fmtDateShort(data.createdAt)}</div>
+            </div>
+            <div class="stat-tile">
+              <div class="tile-label">Network Reason</div>
+              <div class="tile-value" style="font-size:13px;font-weight:600">${data.networkReason}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Proof -->
+        <div class="section">
+          <button class="section-toggle" id="btn-sec-order" onclick="">
+            <div class="section-accent"></div>
+            <span class="section-title">Order Proof</span>
+            <span class="section-chevron">▲</span>
+          </button>
+          <div class="section-body" id="sec-order">
+            <div class="kv-grid">
+              <div class="kv-tile"><div class="kv-label">Order</div><div class="kv-value">${order.name || data.order}</div></div>
+              <div class="kv-tile"><div class="kv-label">Order Date</div><div class="kv-value">${order.created_at ? fmtDate(order.created_at) : '—'}</div></div>
+              <div class="kv-tile"><div class="kv-label">Total</div><div class="kv-value">${order.currency} ${order.total_price}</div></div>
+              <div class="kv-tile"><div class="kv-label">Financial Status</div><div class="kv-value" style="text-transform:capitalize">${(order.financial_status || '—').replace(/_/g,' ')}</div></div>
+              <div class="kv-tile"><div class="kv-label">Fulfillment Status</div><div class="kv-value" style="text-transform:capitalize">${(order.fulfillment_status || 'unfulfilled').replace(/_/g,' ')}</div></div>
+              <div class="kv-tile"><div class="kv-label">Customer Email</div><div class="kv-value">${order.email || '—'}</div></div>
+            </div>
+            ${lineItemsHTML}
+            ${addrHTML}
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="section">
+          <button class="section-toggle" id="btn-sec-ship" onclick="">
+            <div class="section-accent"></div>
+            <span class="section-title">Shipping &amp; Fulfillment</span>
+            <span class="section-chevron">▲</span>
+          </button>
+          <div class="section-body" id="sec-ship">${fulfillHTML}</div>
+        </div>
+
+        <!-- Customer -->
+        <div class="section">
+          <button class="section-toggle closed" id="btn-sec-cust" onclick="">
+            <div class="section-accent"></div>
+            <span class="section-title">Customer History</span>
+            <span class="section-chevron">▼</span>
+          </button>
+          <div class="section-body" id="sec-cust">${customerHTML}</div>
+        </div>
+
+        <!-- Fraud Signals -->
+        <div class="section">
+          <button class="section-toggle${highestRisk === 'low' ? ' closed' : ''}" id="btn-sec-risk" onclick="">
+            <div class="section-accent"></div>
+            <span class="section-title">Fraud Signals</span>
+            ${riskBadgeEl}
+            <span class="section-chevron">${highestRisk === 'low' ? '▼' : '▲'}</span>
+          </button>
+          <div class="section-body" id="sec-risk">${risksHTML}</div>
+        </div>
+      `;
+
+      collapseToggle('sec-order', true);
+      collapseToggle('sec-ship', true);
+      collapseToggle('sec-cust', false);
+      collapseToggle('sec-risk', highestRisk !== 'low');
+    }
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || '1001';
+    const data = EVIDENCE[id];
+
+    if (data) {
+      document.title = `ChargeShield — Order ${data.order}`;
+      renderPage(data);
+    } else {
+      document.getElementById('content').innerHTML = '<p style="color:#6b7280">Dispute not found.</p>';
+    }
+  </script>
+</body>
+</html>

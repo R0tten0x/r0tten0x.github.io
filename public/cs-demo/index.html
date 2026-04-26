@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChargeShield — Dispute Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f6f7;
+      color: #202223;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Mock Shopify top bar ── */
+    .topbar {
+      background: #1a1a2e;
+      color: #fff;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .topbar-logo .shield {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .topbar-logo .shield img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .topbar-store {
+      margin-left: auto;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.07);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .demo-badge {
+      background: #f59e0b;
+      color: #78350f;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* ── Page layout ── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+    .page-heading {
+      font-size: 22px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 24px;
+    }
+
+    /* ── Banner ── */
+    .banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .banner-body { flex: 1; }
+    .banner-title { font-weight: 600; margin-bottom: 2px; color: #1e3a5f; }
+    .banner-sub { font-size: 13px; color: #3b5f8a; }
+    .btn-primary {
+      background: #1e40af;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 9px 18px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* ── Summary grid ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e1e3e5;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .stat-label { font-size: 12px; color: #6b7280; font-weight: 500; margin-bottom: 6px; }
+    .stat-value { font-size: 26px; font-weight: 800; color: #111827; line-height: 1; }
+    .stat-value.critical { color: #dc2626; }
+    .stat-value.caution { color: #d97706; }
+
+    /* ── Section heading ── */
+    .section-heading {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    /* ── Dispute cards ── */
+    .disputes { display: flex; flex-direction: column; gap: 14px; }
+    .dispute-card {
+      background: #fff;
+      border: 1px solid #e1e3e5;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .accent-bar { height: 3px; }
+    .accent-critical { background: #dc2626; }
+    .accent-overdue  { background: #d97706; }
+
+    .card-body { padding: 18px 22px 0; }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-order { font-size: 15px; font-weight: 700; color: #111827; }
+    .card-sub { font-size: 12px; color: #6b7280; margin-top: 3px; }
+
+    .card-deadline { text-align: right; }
+    .deadline-date { font-size: 12px; color: #6b7280; margin-top: 3px; }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 22px;
+      margin-top: 16px;
+      background: rgba(0,0,0,0.025);
+      border-top: 1px solid rgba(0,0,0,0.07);
+    }
+    .card-amount { flex: 1; font-size: 14px; }
+    .card-amount strong { font-weight: 700; }
+    .card-amount span { color: #6b7280; }
+
+    .btn-outline {
+      cursor: pointer;
+      padding: 7px 16px;
+      border: 1px solid rgba(0,0,0,0.18);
+      border-radius: 6px;
+      background: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      color: #111827;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: #f9fafb; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-critical  { background: #fef2f2; color: #dc2626; }
+    .badge-success   { background: #f0fdf4; color: #16a34a; }
+    .badge-caution   { background: #fffbeb; color: #92400e; }
+    .badge-info      { background: #eff6ff; color: #1d4ed8; }
+    .badge-subdued   { background: #f3f4f6; color: #6b7280; }
+  </style>
+</head>
+<body>
+
+  <!-- Mock Shopify nav -->
+  <nav class="topbar">
+    <a class="topbar-logo" href="index.html">
+      <div class="shield"><img src="logo.svg" alt="ChargeShield" /></div>
+      ChargeShield
+    </a>
+    <span class="demo-badge">Demo</span>
+    <div class="topbar-store">demo-merchant.myshopify.com</div>
+  </nav>
+
+  <main class="page">
+    <h1 class="page-heading">Dispute Dashboard</h1>
+
+    <!-- Upgrade banner -->
+    <div class="banner">
+      <div class="banner-body">
+        <div class="banner-title">Automated evidence packets — active</div>
+        <div class="banner-sub">ChargeShield is monitoring your disputes and generating PDF evidence packets automatically.</div>
+      </div>
+      <a href="dispute.html?id=1001" class="btn-primary">View Example PDF →</a>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="summary-grid" id="summary-grid"></div>
+
+    <!-- Active disputes -->
+    <div class="section-heading">Active Disputes</div>
+    <div class="disputes" id="disputes-list"></div>
+  </main>
+
+  <script>
+    // ── Faux data (due dates computed relative to today so urgency is always fresh) ──
+    const now = new Date();
+    const addDays = n => { const d = new Date(now); d.setDate(d.getDate() + n); return d; };
+    const fmtDate = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const fmtCurrency = (n, c) => new Intl.NumberFormat('en-US', { style: 'currency', currency: c }).format(n);
+    const daysLeft = d => Math.ceil((d.getTime() - now.getTime()) / 86400000);
+
+    const DISPUTES = [
+      {
+        id: '1001',
+        order: '#1001',
+        status: 'needs_response',
+        reason: 'Fraudulent',
+        disputeId: 'D-SYN-001',
+        dueAt: addDays(2),
+        amount: 149.99,
+        currency: 'USD',
+        hasPdf: false,
+        pdfUrl: null,
+      },
+      {
+        id: '1002',
+        order: '#1002',
+        status: 'needs_response',
+        reason: 'Product Not Received',
+        disputeId: 'D-SYN-002',
+        dueAt: addDays(5),
+        amount: 89.50,
+        currency: 'USD',
+        hasPdf: false,
+        pdfUrl: null,
+      },
+      {
+        id: '1003',
+        order: '#1003',
+        status: 'needs_response',
+        reason: 'Subscription Cancelled',
+        disputeId: 'D-SYN-003',
+        dueAt: addDays(11),
+        amount: 499.95,
+        currency: 'USD',
+        hasPdf: true,
+        pdfUrl: 'pdf.html?id=1003',
+      },
+      {
+        id: '1004',
+        order: '#1004',
+        status: 'won',
+        reason: 'Credit Not Processed',
+        disputeId: 'D-SYN-004',
+        dueAt: addDays(-12),
+        amount: 59.99,
+        currency: 'USD',
+        hasPdf: true,
+        pdfUrl: 'pdf.html?id=1004',
+      },
+      {
+        id: '1005',
+        order: '#1005',
+        status: 'lost',
+        reason: 'Fraudulent',
+        disputeId: 'D-SYN-005',
+        dueAt: addDays(-7),
+        amount: 214.00,
+        currency: 'USD',
+        hasPdf: false,
+        pdfUrl: null,
+      },
+    ].sort((a, b) => a.dueAt - b.dueAt);
+
+    // ── Helpers ──
+    function statusBadge(status) {
+      const map = {
+        needs_response: ['Needs Response', 'critical'],
+        under_review:   ['Under Review', 'caution'],
+        won:            ['Won', 'success'],
+        lost:           ['Lost', 'critical'],
+        accepted:       ['Accepted', 'caution'],
+        charge_refunded:['Refunded', 'caution'],
+        expired:        ['Expired', 'subdued'],
+      };
+      const [label, tone] = map[status] ?? [status, 'subdued'];
+      return `<span class="badge badge-${tone}">${label}</span>`;
+    }
+
+    function deadlineBadge(days) {
+      if (days <= 0)  return `<span class="badge badge-caution">Overdue</span>`;
+      if (days === 1) return `<span class="badge badge-critical">1 day left</span>`;
+      if (days <= 3)  return `<span class="badge badge-critical">${days} days left</span>`;
+      if (days <= 7)  return `<span class="badge badge-caution">${days} days left</span>`;
+      return `<span class="badge badge-info">${days} days left</span>`;
+    }
+
+    // ── Render summary ──
+    const total = DISPUTES.length;
+    const needsResponse = DISPUTES.filter(d => d.status === 'needs_response').length;
+    const dueSoon = DISPUTES.filter(d => { const dl = daysLeft(d.dueAt); return dl <= 7 && dl > 0; }).length;
+    const critical = DISPUTES.filter(d => { const dl = daysLeft(d.dueAt); return dl <= 3 && dl > 0; }).length;
+
+    document.getElementById('summary-grid').innerHTML = [
+      { label: 'Total Disputes',    value: total,        tone: '' },
+      { label: 'Needs Response',    value: needsResponse,tone: needsResponse > 0 ? 'critical' : '' },
+      { label: 'Due Within 7 Days', value: dueSoon,      tone: dueSoon > 0 ? 'caution' : '' },
+      { label: 'Critical (≤ 3 Days)',value: critical,    tone: critical > 0 ? 'critical' : '' },
+    ].map(({ label, value, tone }) => `
+      <div class="stat-card">
+        <div class="stat-label">${label}</div>
+        <div class="stat-value ${tone}">${value}</div>
+      </div>
+    `).join('');
+
+    // ── Render disputes ──
+    document.getElementById('disputes-list').innerHTML = DISPUTES.map(d => {
+      const dl = daysLeft(d.dueAt);
+      const accentBar = dl <= 3 && dl > 0
+        ? '<div class="accent-bar accent-critical"></div>'
+        : dl <= 0
+          ? '<div class="accent-bar accent-overdue"></div>'
+          : '';
+
+      const pdfBadge = d.hasPdf && d.pdfUrl
+        ? `<a href="${d.pdfUrl}" target="_blank" class="badge badge-success" style="text-decoration:none;">PDF Ready ↗</a>`
+        : `<span class="badge badge-subdued">PDF Pending</span>`;
+
+      return `
+        <div class="dispute-card">
+          ${accentBar}
+          <div class="card-body">
+            <div class="card-header">
+              <div>
+                <div class="card-order">
+                  Order ${d.order} &nbsp; ${statusBadge(d.status)}
+                </div>
+                <div class="card-sub">${d.reason} · Dispute #${d.disputeId}</div>
+              </div>
+              <div class="card-deadline">
+                ${deadlineBadge(dl)}
+                <div class="deadline-date">Due ${fmtDate(d.dueAt)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-amount">
+              <strong>${fmtCurrency(d.amount, d.currency)}</strong>
+              <span> at risk</span>
+            </div>
+            ${pdfBadge}
+            <a href="dispute.html?id=${d.id}" class="btn-outline">View Evidence →</a>
+          </div>
+        </div>
+      `;
+    }).join('');
+  </script>
+
+</body>
+</html>
