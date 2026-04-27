@@ -20,7 +20,7 @@ const projects = [
     name: "Charge Shield, A microSaaS shopify app that helps you collect evidence and respond to payment disputes and chargebacks.",
     description:
     "To help Shopify merchants collect evidence and respond to payment disputes and chargebacks.",
-    link: null,
+    link: "http://r0tten0x.com/cs-demo/index.html",
   },
 ];
 
