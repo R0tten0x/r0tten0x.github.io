@@ -16,11 +16,14 @@ const projects = [
       "To empower residents with the ability to keep up to date on theft, sales, upcoming events, missing packages.",
     link: null,
   },
+];
+
+const completedProjects = [ 
   {
-    name: "Charge Shield, A microSaaS shopify app that helps you collect evidence and respond to payment disputes and chargebacks.",
+    name: "Charge Shield",
     description:
-    "To help Shopify merchants collect evidence and respond to payment disputes and chargebacks.",
-    link: "http://r0tten0x.com/cs-demo/index.html",
+    "ChargeShield fights chargebacks so you don't have to.",
+    link: "http://r0tten0x.dev/cs-demo/index.html",
   },
 ];
 
@@ -61,6 +64,37 @@ export default function Projects() {
             )}
           </motion.div>
         ))}
+        {completedProjects.map((project, i) => (
+              <motion.div
+                key={project.name}
+                className="group relative rounded-xl border border-white/10 bg-white/[0.02] p-6 transition-colors duration-300 hover:border-blue-400/30 hover:bg-white/[0.04]"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+              >
+                <span className="inline-block text-[10px] tracking-widest uppercase text-blue-400/80 mb-3">
+                  Completed
+                </span>
+                <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
+                <p className="text-neutral-400 text-sm leading-relaxed">
+                  {project.description}
+                </p>
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-4 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    View Demo
+                    <span className="transition-transform group-hover:translate-x-0.5">
+                      &rarr;
+                    </span>
+                  </a>
+                )}
+              </motion.div>
+            ))}
       </div>
     </AnimatedSection>
   );
