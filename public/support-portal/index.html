@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support | R0tten0x</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0d;
+      --surface:  #141414;
+      --border:   rgba(255,255,255,0.07);
+      --fg:       #ededed;
+      --muted:    #6b7280;
+      --blue:     #60a5fa;
+      --purple:   #a78bfa;
+      --font:     'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    /* ── orb glow ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(96,165,250,0.06) 0%, rgba(167,139,250,0.06) 60%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 36px;
+    }
+
+    /* ── header ── */
+    .header { text-align: center; margin-bottom: 36px; }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header h1 span {
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .divider {
+      width: 64px;
+      height: 1px;
+      margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(96,165,250,0.5), transparent);
+    }
+
+    .header p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── form ── */
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--fg);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(96,165,250,0.4);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.08);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #1a1a1a;
+      color: var(--fg);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* ── order number row (hidden by default) ── */
+    #order-group {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease, margin-bottom 0.35s ease;
+      margin-bottom: 0;
+    }
+
+    #order-group.visible {
+      max-height: 100px;
+      opacity: 1;
+      margin-bottom: 20px;
+    }
+
+    /* ── submit ── */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 8px;
+    }
+
+    .btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { opacity: 1;    transform: translateY(0);    }
+
+    /* ── toast ── */
+    #toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface);
+      border: 1px solid rgba(96,165,250,0.3);
+      color: var(--fg);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      padding: 12px 24px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── footer ── */
+    footer {
+      position: relative; z-index: 1;
+      margin-top: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="header">
+      <h1>Support <span>| R0tten0x</span></h1>
+      <div class="divider"></div>
+      <p>Fill out the form and I'll get back to you as soon as possible.</p>
+    </div>
+
+    <form
+      id="support-form"
+      action="https://formspree.io/f/mpqkevql"
+      method="POST"
+    >
+      <!-- Application -->
+      <div class="form-group">
+        <label for="application">Application</label>
+        <select id="application" name="application" required>
+          <option value="" disabled selected>Select an application…</option>
+          <option value="ChargeShield">ChargeShield</option>
+          <option value="BuryMeHere">BuryMeHere</option>
+          <option value="MollisonTownHomes">MollisonTownHomes</option>
+          <option value="ResumeFX">ResumeFX</option>
+          <option value="100DaysOfJavascript">100DaysOfJavascript</option>
+        </select>
+      </div>
+
+      <!-- Order Number (ChargeShield only) -->
+      <div id="order-group">
+        <label for="order_number">Order Number</label>
+        <input
+          type="text"
+          id="order_number"
+          name="order_number"
+          placeholder="e.g. #1042"
+        />
+      </div>
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input
+          type="text"
+          id="full_name"
+          name="full_name"
+          placeholder="Jane Doe"
+          required
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="jane@example.com"
+          required
+        />
+      </div>
+
+      <!-- Time of incident -->
+      <div class="form-group">
+        <label for="incident_time">Time of Incident</label>
+        <input
+          type="datetime-local"
+          id="incident_time"
+          name="incident_time"
+          required
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Describe what happened…"
+          required
+        ></textarea>
+      </div>
+
+      <!-- Hidden redirect field so Formspree doesn't bounce users away -->
+      <input type="hidden" name="_next" value="about:blank" />
+      <!-- Honeypot spam guard -->
+      <input type="text" name="_gotcha" style="display:none" />
+
+      <button type="submit" class="btn">Submit Ticket</button>
+    </form>
+  </div>
+
+  <footer>
+    <a href="/">&larr; r0tten0x.github.io</a>
+    &nbsp;&bull;&nbsp;
+    &copy; <span id="yr"></span> Robert | R0tten0x
+  </footer>
+
+  <div id="toast">Ticket submitted — I'll be in touch soon.</div>
+
+  <script>
+    // ── Year ──
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // ── Show / hide Order Number for ChargeShield ──
+    const appSelect  = document.getElementById('application');
+    const orderGroup = document.getElementById('order-group');
+    const orderInput = document.getElementById('order_number');
+
+    appSelect.addEventListener('change', () => {
+      const isCS = appSelect.value === 'ChargeShield';
+      orderGroup.classList.toggle('visible', isCS);
+      orderInput.required = isCS;
+    });
+
+    // ── Async submit (keeps user on page) ──
+    const form  = document.getElementById('support-form');
+    const toast = document.getElementById('toast');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('.btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (res.ok) {
+          form.reset();
+          orderGroup.classList.remove('visible');
+          orderInput.required = false;
+          showToast('Ticket submitted — I\'ll be in touch soon.');
+        } else {
+          showToast('Something went wrong — please try again.');
+        }
+      } catch {
+        showToast('Network error — please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Ticket';
+      }
+    });
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+  </script>
+</body>
+</html>
