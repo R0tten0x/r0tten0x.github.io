@@ -16,6 +16,13 @@ const projects = [
       "To empower residents with the ability to keep up to date on theft, sales, upcoming events, missing packages.",
     link: null,
   },
+  {
+    name: "SnappIcon",
+    description:
+      "Designers waste time juggling tools to generate favicons, OG images & app icons. Snappicon does it all in one place, instantly.",
+    link: null,
+  },
+
 ];
 
 const completedProjects = [ 
