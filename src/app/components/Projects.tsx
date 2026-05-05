@@ -16,13 +16,6 @@ const projects = [
       "To empower residents with the ability to keep up to date on theft, sales, upcoming events, missing packages.",
     link: null,
   },
-  {
-    name: "SnappIcon",
-    description:
-      "Designers waste time juggling tools to generate favicons, OG images & app icons. Snappicon does it all in one place, instantly.",
-    link: null,
-  },
-
 ];
 
 const completedProjects = [ 
@@ -32,6 +25,13 @@ const completedProjects = [
     "ChargeShield fights chargebacks so you don't have to.",
     link: "http://r0tten0x.dev/cs-demo/index.html",
   },
+  {
+    name: "SnappIcon",
+    description:
+    "Why spend hours creating web ready icons when SnappIcon exits",
+    link: "https://snappicon.com"
+  }
+  
 ];
 
 export default function Projects() {
