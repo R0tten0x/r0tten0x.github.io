@@ -94,8 +94,8 @@ export default function Projects() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 mt-4 text-sm text-blue-400 hover:text-blue-300 transition-colors"
                   >
-                    View Demo
-                    <span className="transition-transform group-hover:translate-x-0.5">
+                  Visit   
+                <span className="transition-transform group-hover:translate-x-0.5">
                       &rarr;
                     </span>
                   </a>
