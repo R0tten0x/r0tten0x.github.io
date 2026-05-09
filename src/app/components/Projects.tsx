@@ -16,15 +16,15 @@ const projects = [
       "To empower residents with the ability to keep up to date on theft, sales, upcoming events, missing packages.",
     link: null,
   },
-  {
-    name: "StillUp",
-    description:
-    "Real-time uptime monitoring with beautiful public status pages. Know before your users do.",
-    link: "https://stillup.org",
-  }
 ];
 
 const completedProjects = [ 
+  {
+    name: "StillUp - Know before your users do",
+    description: 
+    "Uptime monitoring and beautiful public status pages — starting at $9/mo. Half the price of the competition, all the features your SaaS needs.",
+    link: "https://www.stillup.org"
+  },
   {
     name: "Charge Shield",
     description:
