@@ -39,6 +39,41 @@ body {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+/* Hero animations — CSS-only so Hero can be a server component */
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes hero-slide-up-30 {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-slide-up-20 {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+}
+
+/* Article prose */
+.prose-article { color: rgba(240, 240, 245, 0.75); line-height: 1.8; font-size: 1.0625rem; }
+.prose-article h2 { font-size: 1.4rem; font-weight: 700; color: #F0F0F5; margin: 2.5rem 0 0.75rem; letter-spacing: -0.02em; }
+.prose-article h3 { font-size: 1.1rem; font-weight: 600; color: #F0F0F5; margin: 2rem 0 0.5rem; }
+.prose-article p { margin: 0 0 1.25rem; }
+.prose-article ul, .prose-article ol { margin: 0 0 1.25rem 1.25rem; }
+.prose-article li { margin-bottom: 0.4rem; }
+.prose-article strong { color: #F0F0F5; font-weight: 600; }
+.prose-article em { color: rgba(240,240,245,0.6); }
+.prose-article a { color: #4F7EFF; text-decoration: underline; text-underline-offset: 3px; }
+.prose-article a:hover { color: #7fa3ff; }
+.prose-article code { font-family: var(--font-mono); font-size: 0.875em; background: rgba(79,126,255,0.1); border: 1px solid rgba(79,126,255,0.2); border-radius: 4px; padding: 0.15em 0.45em; color: #a8c4ff; }
+.prose-article pre { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 0 0 1.5rem; }
+.prose-article pre code { background: none; border: none; padding: 0; font-size: 0.875rem; color: rgba(240,240,245,0.8); }
+.prose-article blockquote { border-left: 2px solid rgba(79,126,255,0.4); margin: 0 0 1.25rem; padding: 0.5rem 0 0.5rem 1.25rem; color: rgba(240,240,245,0.5); font-style: italic; }
+.prose-article hr { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 2rem 0; }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

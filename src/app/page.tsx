@@ -5,6 +5,38 @@ import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
 
+const productsJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "StillUp",
+    url: "https://www.stillup.org",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description:
+      "Uptime monitoring and beautiful public status pages. Half the price of the competition, all the features your SaaS needs.",
+    offers: { "@type": "Offer", price: "9.00", priceCurrency: "USD" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "ChargeShield",
+    url: "https://r0tten0x.dev",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: "Chargeback prevention and protection SaaS. ChargeShield fights chargebacks so you don't have to.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SnappIcon",
+    url: "https://snappicon.com",
+    applicationCategory: "DesignApplication",
+    operatingSystem: "Web",
+    description: "App icon and favicon generator. Create web-ready icons instantly.",
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -14,9 +46,13 @@ export default function Home() {
         <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-primary/[0.04] blur-[100px]" />
       </div>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productsJsonLd) }}
+      />
       <Navbar />
-      <Hero />
       <main>
+        <Hero />
         <About />
         <Projects />
         <Skills />

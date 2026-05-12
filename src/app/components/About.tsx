@@ -4,7 +4,7 @@ import SectionLabel from "./SectionLabel";
 const stats = [
   { value: "27yrs", label: "In the industry" },
   { value: "5+", label: "Apps shipped" },
-  { value: "E2E", label: "Design to deploy" },
+  { value: "200+", label: "Users served" },
 ];
 
 export default function About() {
@@ -35,6 +35,12 @@ export default function About() {
           combining deep industry experience with hands-on development across modern
           stacks.
         </p>
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-1.5 mt-6 text-[11px] font-mono tracking-wider uppercase text-primary/70 hover:text-primary transition-colors"
+        >
+          Get in touch <span>&rarr;</span>
+        </a>
       </div>
     </AnimatedSection>
   );

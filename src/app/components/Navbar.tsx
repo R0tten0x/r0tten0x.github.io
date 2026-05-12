@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { SiGithub } from "react-icons/si";
 
 const links = [
   { href: "#about", label: "About" },
@@ -77,10 +79,26 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href="/writing"
+            className="text-[11px] font-mono tracking-[0.18em] uppercase text-white/40 hover:text-white/80 transition-colors duration-200"
+          >
+            Writing
+          </Link>
         </div>
 
-        {/* Spacer to balance flex layout */}
-        <div className="w-24 hidden md:block" />
+        {/* Right — GitHub */}
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="https://github.com/R0tten0x"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="text-white/30 hover:text-white/80 transition-colors duration-200"
+          >
+            <SiGithub className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </motion.nav>
   );
