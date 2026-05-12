@@ -1,21 +1,16 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'JetBrains Mono Nerd Font';
-  src: url('/fonts/JetBrainsMonoNerdFont-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+@theme {
+  --color-primary: #4F7EFF;
+  --color-surface: #1A1A1F;
+  --color-background: #0D0D0F;
+  --color-foreground: #F0F0F5;
+  --color-success: #07CA6B;
+  --color-warning: #E89558;
+  --color-danger: #EA2143;
 
-:root {
-  --background: #0d0d0d;
-  --foreground: #ededed;
-  --font-jetbrains-mono-nerd: 'JetBrains Mono Nerd Font', monospace;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
 }
 
 html {
@@ -23,25 +18,38 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-jetbrains-mono-nerd);
+  background: #0D0D0F;
+  color: #F0F0F5;
 }
 
-/* Subtle custom scrollbar */
+/* Glass utility — add rounded-* on each usage */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.glass-nav {
+  background: rgba(13, 13, 15, 0.80);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
