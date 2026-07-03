@@ -17,6 +17,18 @@ const projects = [
       "Empowering residents to stay up to date on theft, sales, upcoming events, and missing packages.",
     link: null,
   },
+  {
+    name: "Brawn",
+    description:
+      "A tool for those seeking to make a bit of money doing unskilled work.",
+    link: null,
+  },
+  {
+    name: "Local Gems",
+    description:
+      "At LocalGems, our mission is to give every small business the visibility it deserves — free from the shadow of big-box corporations.",
+    link: null,
+  },
 ];
 
 const completedProjects = [
