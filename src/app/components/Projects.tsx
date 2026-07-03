@@ -21,13 +21,13 @@ const projects = [
     name: "Brawn",
     description:
       "A tool for those seeking to make a bit of money doing unskilled work.",
-    link: null,
+    link: "https://brawnnow.com",
   },
   {
     name: "Local Gems",
     description:
       "At LocalGems, our mission is to give every small business the visibility it deserves — free from the shadow of big-box corporations.",
-    link: null,
+    link: "https://localgems.org",
   },
 ];
 
@@ -69,7 +69,9 @@ function ProjectCard({
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <div className="flex-1">
-        <h3 className="text-base font-semibold mb-2 tracking-tight">{project.name}</h3>
+        <h3 className="text-base font-semibold mb-2 tracking-tight">
+          {project.name}
+        </h3>
         <p className="text-white/40 text-sm leading-relaxed font-light">
           {project.description}
         </p>
@@ -82,7 +84,9 @@ function ProjectCard({
           className="inline-flex items-center gap-1.5 mt-5 text-[11px] font-mono tracking-wider uppercase text-primary/70 hover:text-primary transition-colors"
         >
           {linkLabel}
-          <span className="transition-transform group-hover:translate-x-0.5">&rarr;</span>
+          <span className="transition-transform group-hover:translate-x-0.5">
+            &rarr;
+          </span>
         </a>
       )}
     </motion.div>
@@ -106,7 +110,12 @@ export default function Projects() {
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {projects.map((project, i) => (
-            <ProjectCard key={project.name} project={project} index={i} linkLabel="View Project" />
+            <ProjectCard
+              key={project.name}
+              project={project}
+              index={i}
+              linkLabel="View Project"
+            />
           ))}
         </div>
       </div>
@@ -120,7 +129,12 @@ export default function Projects() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {completedProjects.map((project, i) => (
-            <ProjectCard key={project.name} project={project} index={i} linkLabel="Visit" />
+            <ProjectCard
+              key={project.name}
+              project={project}
+              index={i}
+              linkLabel="Visit"
+            />
           ))}
         </div>
       </div>
