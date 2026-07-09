@@ -49,6 +49,12 @@ const completedProjects = [
       "Why spend hours creating web-ready icons when SnappIcon exists.",
     link: "https://snappicon.com",
   },
+  {
+    name: "Rust from Zero",
+    description:
+      "A course built to learn rust in a custructivst approach. For those who need the why before the what.",
+    link: "https://github.com/R0tten0x/Rust-Course"
+  },
 ];
 
 function ProjectCard({
