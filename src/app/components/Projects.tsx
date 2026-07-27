@@ -18,16 +18,9 @@ const projects = [
     link: null,
   },
   {
-    name: "Brawn",
-    description:
-      "A tool for those seeking to make a bit of money doing unskilled work.",
-    link: "https://brawnnow.com",
-  },
-  {
-    name: "Local Gems",
-    description:
-      "At LocalGems, our mission is to give every small business the visibility it deserves — free from the shadow of big-box corporations.",
-    link: "https://localgems.org",
+    name: "Ember",
+    description: "A Beautiful terminal developer dashboard for powerusers",
+    link: null,
   },
 ];
 
@@ -53,7 +46,7 @@ const completedProjects = [
     name: "Rust from Zero",
     description:
       "A course built to learn rust in a custructivst approach. For those who need the why before the what.",
-    link: "https://github.com/R0tten0x/Rust-Course"
+    link: "https://github.com/R0tten0x/Rust-Course",
   },
 ];
 
