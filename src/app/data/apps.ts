@@ -65,7 +65,7 @@ export const apps: App[] = [
     repo: null,
   },
   {
-    name: "RotGrab",
+    name: "Ember",
     status: "archived",
     kind: "cli",
     description:
@@ -76,11 +76,6 @@ export const apps: App[] = [
 ];
 
 export const earlierWork = [
-  {
-    name: "Ember",
-    description: "Terminal developer dashboard for power users.",
-    link: null,
-  },
   {
     name: "Rust from Zero",
     description:
