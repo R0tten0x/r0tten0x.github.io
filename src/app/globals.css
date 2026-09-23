@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #4F7EFF;
-  --color-surface: #1A1A1F;
-  --color-background: #0D0D0F;
-  --color-foreground: #F0F0F5;
-  --color-success: #07CA6B;
-  --color-warning: #E89558;
-  --color-danger: #EA2143;
+@theme inline {
+  --color-primary: #F74C00;
+  --color-surface: #121214;
+  --color-border: #26262A;
+  --color-background: #0B0B0C;
+  --color-foreground: #E6E3DC;
+  --color-muted: #8A877F;
+  --color-success: #3FB950;
+  --color-warning: #D29922;
+  --color-danger: #F85149;
 
   --font-sans: var(--font-jakarta), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), monospace;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 html {
@@ -18,25 +20,37 @@ html {
 }
 
 body {
-  background: #0D0D0F;
-  color: #F0F0F5;
+  background-color: #0B0B0C;
+  background-image: radial-gradient(rgba(230, 227, 220, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: #E6E3DC;
 }
 
-/* Glass utility — add rounded-* on each usage */
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+::selection {
+  background: rgba(247, 76, 0, 0.35);
+  color: #fff;
 }
 
-.glass-nav {
-  background: rgba(13, 13, 15, 0.80);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+/* TUI pane: flat surface, solid border. Add a .pane-title child for a ratatui-style block title. */
+.pane {
+  position: relative;
+  background: #121214;
+  border: 1px solid #26262A;
+  border-radius: 4px;
+}
+
+.pane-title {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  transform: translateY(-50%);
+  padding: 0 6px;
+  background: #121214;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #8A877F;
+  line-height: 1;
 }
 
 /* Hero animations — CSS-only so Hero can be a server component */
@@ -52,39 +66,29 @@ body {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-@keyframes hero-breathe {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.5); }
+@keyframes hero-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-/* Article prose */
-.prose-article { color: rgba(240, 240, 245, 0.75); line-height: 1.8; font-size: 1.0625rem; }
-.prose-article h2 { font-size: 1.4rem; font-weight: 700; color: #F0F0F5; margin: 2.5rem 0 0.75rem; letter-spacing: -0.02em; }
-.prose-article h3 { font-size: 1.1rem; font-weight: 600; color: #F0F0F5; margin: 2rem 0 0.5rem; }
-.prose-article p { margin: 0 0 1.25rem; }
-.prose-article ul, .prose-article ol { margin: 0 0 1.25rem 1.25rem; }
-.prose-article li { margin-bottom: 0.4rem; }
-.prose-article strong { color: #F0F0F5; font-weight: 600; }
-.prose-article em { color: rgba(240,240,245,0.6); }
-.prose-article a { color: #4F7EFF; text-decoration: underline; text-underline-offset: 3px; }
-.prose-article a:hover { color: #7fa3ff; }
-.prose-article code { font-family: var(--font-mono); font-size: 0.875em; background: rgba(79,126,255,0.1); border: 1px solid rgba(79,126,255,0.2); border-radius: 4px; padding: 0.15em 0.45em; color: #a8c4ff; }
-.prose-article pre { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 0 0 1.5rem; }
-.prose-article pre code { background: none; border: none; padding: 0; font-size: 0.875rem; color: rgba(240,240,245,0.8); }
-.prose-article blockquote { border-left: 2px solid rgba(79,126,255,0.4); margin: 0 0 1.25rem; padding: 0.5rem 0 0.5rem 1.25rem; color: rgba(240,240,245,0.5); font-style: italic; }
-.prose-article hr { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 2rem 0; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #0B0B0C;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 3px;
+  background: #26262A;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #3a3a40;
 }

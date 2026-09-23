@@ -1,64 +1,75 @@
+import { apps } from "../data/apps";
+
 export default function Hero() {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen px-6 overflow-hidden text-center">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/[0.07] blur-[130px] pointer-events-none" />
-
-      <div
-        className="relative z-10 flex flex-col items-center"
-        style={{ animation: "hero-fade-in 0.6s ease forwards", opacity: 0 }}
-      >
-        <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] max-w-4xl"
-          style={{ animation: "hero-slide-up-30 0.7s ease 0.1s forwards", opacity: 0 }}
-        >
-          Independent Software Engineer{" "}
-          <span className="text-primary">
-            Building SaaS, Web &amp; Mobile Products
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="mt-6 text-base md:text-lg text-white/40 max-w-lg font-light leading-relaxed"
-          style={{ animation: "hero-slide-up-20 0.7s ease 0.45s forwards", opacity: 0 }}
-        >
-          Full-stack developer with 27 years in IT. I design, build, and ship
-          reliable products end to end — solo.
+    <section className="relative flex flex-col justify-center min-h-screen max-w-5xl mx-auto px-6 pt-24 pb-16">
+      <div style={{ animation: "hero-fade-in 0.6s ease forwards", opacity: 0 }}>
+        <p className="font-mono text-xs text-muted mb-6">
+          <span className="text-primary">$</span> whoami
+          <span className="text-foreground/80"> robert (r0tten0x): systems &amp; rust developer</span>
         </p>
 
-        {/* CTA buttons */}
+        <h1
+          className="font-mono text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] max-w-4xl"
+          style={{ animation: "hero-slide-up-30 0.7s ease 0.1s forwards", opacity: 0 }}
+        >
+          Rust tools for the machine{" "}
+          <span className="text-primary">you actually use.</span>
+        </h1>
+
+        <p
+          className="mt-6 text-base md:text-lg text-muted max-w-xl leading-relaxed"
+          style={{ animation: "hero-slide-up-20 0.7s ease 0.45s forwards", opacity: 0 }}
+        >
+          Menu bar utilities, background daemons, and terminal system observers,
+          built in Rust for macOS. 27 years in IT, now spent automating the boring parts.
+        </p>
+
         <div
-          className="mt-10 flex items-center gap-4 flex-wrap justify-center"
+          className="mt-10 flex items-center gap-3 flex-wrap"
           style={{ animation: "hero-slide-up-20 0.6s ease 0.65s forwards", opacity: 0 }}
         >
           <a
-            href="#projects"
-            className="px-6 py-3 rounded-xl bg-primary text-white text-sm font-semibold tracking-wide transition-all duration-200 shadow-[0_0_24px_rgba(79,126,255,0.35)] hover:bg-primary/90 hover:shadow-[0_0_40px_rgba(79,126,255,0.55)]"
+            href="#apps"
+            className="px-5 py-2.5 rounded-[3px] bg-primary text-background font-mono text-sm font-semibold transition-colors duration-150 hover:bg-[#ff6a24]"
           >
-            View My Work
+            ./view-apps
           </a>
           <a
             href="https://github.com/R0tten0x"
             target="_blank"
             rel="noopener noreferrer"
-            className="glass px-6 py-3 rounded-xl text-sm font-semibold tracking-wide text-white/60 hover:text-white hover:border-primary/40 hover:shadow-[0_0_24px_rgba(79,126,255,0.2)] transition-all duration-200"
+            className="px-5 py-2.5 rounded-[3px] border border-border font-mono text-sm text-foreground/80 hover:border-primary hover:text-foreground transition-colors duration-150"
           >
-            GitHub →
+            github →
           </a>
         </div>
-      </div>
 
-      {/* Scroll indicator */}
-      <div
-        className="absolute bottom-10 flex flex-col items-center gap-2 text-white/25"
-        style={{ animation: "hero-fade-in 0.6s ease 1.2s forwards", opacity: 0 }}
-      >
-        <span className="text-[10px] font-mono tracking-[0.3em] uppercase">Scroll</span>
+        {/* Terminal block */}
         <div
-          className="w-px h-8 bg-gradient-to-b from-white/25 to-transparent"
-          style={{ animation: "hero-breathe 2s ease-in-out infinite" }}
-        />
+          className="pane mt-14 max-w-xl"
+          style={{ animation: "hero-slide-up-20 0.6s ease 0.85s forwards", opacity: 0 }}
+        >
+          <span className="pane-title">zsh — ~/Developer/Projects</span>
+          <div className="px-5 pt-6 pb-5 font-mono text-[13px] leading-6 overflow-x-auto">
+            <p>
+              <span className="text-primary">❯</span> ls --apps
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 text-foreground/85">
+              {apps.map((app) => (
+                <span key={app.name}>{app.name.toLowerCase()}</span>
+              ))}
+            </div>
+            <p className="mt-1">
+              <span className="text-primary">❯</span>{" "}
+              <span
+                aria-hidden
+                className="inline-block w-2 h-4 align-[-2px] bg-foreground/80"
+                style={{ animation: "hero-caret 1.1s step-end infinite" }}
+              />
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

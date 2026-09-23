@@ -6,46 +6,47 @@ import SectionLabel from "./SectionLabel";
 
 const skillCategories = [
   {
-    category: "Mobile",
-    skills: ["SwiftUI", "React Native"],
+    category: "systems",
+    skills: ["Rust", "C", "Swift", "SwiftUI"],
   },
   {
-    category: "Languages",
-    skills: ["C", "Python", "JavaScript", "TypeScript", "RUST", "C#", ],
+    category: "crates",
+    skills: ["tokio", "ratatui", "notify", "serde", "tray-icon", "winit", "sysinfo", "rayon"],
   },
   {
-    category: "Scripting",
-    skills: ["Bash", "ZSH", "PowerShell"],
+    category: "scripting",
+    skills: ["Bash", "Zsh", "Python", "PowerShell"],
   },
   {
-    category: "Full-Stack",
-    skills: ["Next.js", "React", "HTML", "CSS", "Tailwind", "SQL", "Postgres", "MongoDB"],
+    category: "also",
+    skills: ["TypeScript", "Next.js", "React", "SQL", "Postgres"],
   },
 ];
 
 export default function Skills() {
   return (
-    <AnimatedSection id="skills" className="max-w-4xl mx-auto px-6 py-28">
+    <AnimatedSection id="stack" className="max-w-5xl mx-auto px-6 py-24">
       <SectionLabel label="Stack" />
-      <h2 className="text-3xl md:text-4xl font-bold mb-12 tracking-tight">
+      <h2 className="font-mono text-2xl md:text-3xl font-bold mb-12 tracking-tight">
         Tools of the trade.
       </h2>
 
-      <div className="glass rounded-2xl p-8 space-y-8">
+      <div className="pane p-6 md:p-8 pt-8 space-y-6">
+        <span className="pane-title">Cargo.toml</span>
         {skillCategories.map((group, gi) => (
-          <div key={group.category}>
-            <h3 className="text-[10px] font-mono tracking-[0.25em] uppercase text-white/25 mb-4">
-              {group.category}
+          <div key={group.category} className="grid sm:grid-cols-[120px_1fr] gap-3 items-start">
+            <h3 className="font-mono text-xs text-muted pt-1.5">
+              [{group.category}]
             </h3>
             <div className="flex flex-wrap gap-2">
               {group.skills.map((skill, si) => (
                 <motion.span
                   key={skill}
-                  className="px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] text-sm text-white/55 hover:border-primary/40 hover:text-white/90 transition-all duration-200 cursor-default"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="font-mono px-2.5 py-1 rounded-[2px] border border-border bg-background text-[13px] text-foreground/75 hover:border-primary hover:text-foreground transition-colors duration-150 cursor-default"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: gi * 0.08 + si * 0.04 }}
+                  transition={{ duration: 0.3, delay: gi * 0.08 + si * 0.03 }}
                 >
                   {skill}
                 </motion.span>

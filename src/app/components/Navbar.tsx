@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { SiGithub } from "react-icons/si";
 
 const links = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
+  { href: "#about", label: "about" },
+  { href: "#apps", label: "apps" },
+  { href: "#stack", label: "stack" },
+  { href: "#contact", label: "contact" },
 ];
 
 export default function Navbar() {
@@ -26,9 +25,10 @@ export default function Navbar() {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 200) {
           setActive(id);
-          break;
+          return;
         }
       }
+      setActive("");
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -36,69 +36,64 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-nav" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-200 ${
+        scrolled ? "bg-background/95 border-border" : "bg-transparent border-transparent"
       }`}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
+      <div className="max-w-5xl mx-auto flex items-center justify-between py-3.5 px-6">
         {/* Brand */}
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          className="flex items-center gap-2.5 text-sm font-mono tracking-widest uppercase text-white/70 hover:text-white transition-colors"
+          className="flex items-center gap-2.5 font-mono text-sm text-foreground/85 hover:text-foreground transition-colors"
         >
           <Image
             src="/avatar.png"
             alt="R0tten0x"
-            width={28}
-            height={28}
-            className="rounded-full ring-1 ring-white/10"
+            width={26}
+            height={26}
+            className="rounded-[3px] ring-1 ring-border"
           />
-          R0tten0x
+          <span>
+            r0tten0x<span className="text-primary">@</span>dev
+          </span>
         </a>
 
         {/* Nav links */}
-        <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className={`text-[11px] font-mono tracking-[0.18em] uppercase transition-colors duration-200 ${
-                active === link.href.slice(1)
-                  ? "text-primary"
-                  : "text-white/40 hover:text-white/80"
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-          <Link
-            href="/writing"
-            className="text-[11px] font-mono tracking-[0.18em] uppercase text-white/40 hover:text-white/80 transition-colors duration-200"
-          >
-            Writing
-          </Link>
+        <div className="hidden md:flex items-center gap-6">
+          {links.map((link) => {
+            const isActive = active === link.href.slice(1);
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className={`font-mono text-xs transition-colors duration-150 ${
+                  isActive ? "text-primary" : "text-muted hover:text-foreground"
+                }`}
+              >
+                <span className={isActive ? "" : "invisible"}>▸</span> {link.label}
+              </a>
+            );
+          })}
         </div>
 
         {/* Right — GitHub */}
-        <div className="hidden md:flex items-center gap-3">
-          <a
-            href="https://github.com/R0tten0x"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="text-white/30 hover:text-white/80 transition-colors duration-200"
-          >
-            <SiGithub className="w-4 h-4" />
-          </a>
-        </div>
+        <a
+          href="https://github.com/R0tten0x"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          className="text-muted hover:text-foreground transition-colors duration-150"
+        >
+          <SiGithub className="w-4 h-4" />
+        </a>
       </div>
     </motion.nav>
   );

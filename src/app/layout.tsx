@@ -11,21 +11,21 @@ const jakarta = Plus_Jakarta_Sans({
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://r0tten0x.dev"),
-  title: "Robert (R0tten0x) | Solo Full-Stack Developer & SaaS Builder",
+  title: "Robert (R0tten0x) | Rust Developer: macOS Utilities & System Observers",
   description:
-    "Independent full-stack software engineer with 27 years in IT, architecture, and technical leadership. Building reliable SaaS, web, and mobile products end to end.",
+    "Systems and Rust developer with 27 years in IT. Building menu bar utilities, background daemons, and terminal system observers for macOS.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Robert (R0tten0x) | Solo Full-Stack Developer & SaaS Builder",
+    title: "Robert (R0tten0x) | Rust Developer: macOS Utilities & System Observers",
     description:
-      "Independent full-stack software engineer with 27 years in IT, architecture, and technical leadership. Building reliable SaaS, web, and mobile products end to end.",
+      "Systems and Rust developer with 27 years in IT. Building menu bar utilities, background daemons, and terminal system observers for macOS.",
     url: "https://r0tten0x.dev",
     siteName: "R0tten0x",
     images: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "R0tten0x — Solo Full-Stack Developer & SaaS Builder",
+        alt: "R0tten0x — Rust developer building macOS utilities and system observers",
       },
     ],
     locale: "en_US",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Robert (R0tten0x) | Solo Full-Stack Developer & SaaS Builder",
+    title: "Robert (R0tten0x) | Rust Developer: macOS Utilities & System Observers",
     description:
-      "Independent full-stack software engineer with 27 years in IT. Building reliable SaaS, web, and mobile products end to end.",
+      "Systems and Rust developer with 27 years in IT. Menu bar utilities, daemons, and terminal observers for macOS.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -61,9 +61,9 @@ const jsonLd = {
   name: "Robert",
   alternateName: "R0tten0x",
   url: "https://r0tten0x.dev",
-  jobTitle: "Full-Stack Software Engineer",
+  jobTitle: "Systems & Rust Developer",
   description:
-    "Independent full-stack software engineer and solo SaaS founder with 27 years in IT.",
+    "Independent systems and Rust developer with 27 years in IT, building automation tools and system observers for macOS.",
   sameAs: ["https://github.com/R0tten0x"],
 };
 

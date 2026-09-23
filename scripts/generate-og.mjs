@@ -8,12 +8,26 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 
-const fontSemiBold = readFileSync(
-  join(root, "node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff")
+const fontRegular = readFileSync(
+  join(root, "node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff")
 );
 const fontBold = readFileSync(
-  join(root, "node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff")
+  join(root, "node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff")
 );
+
+const fonts = [
+  { name: "JetBrains Mono", data: fontRegular, weight: 400, style: "normal" },
+  { name: "JetBrains Mono", data: fontBold, weight: 700, style: "normal" },
+];
+
+const BG = "#0B0B0C";
+const SURFACE = "#121214";
+const BORDER = "#26262A";
+const FG = "#E6E3DC";
+const MUTED = "#8A877F";
+const ACCENT = "#F74C00";
+
+const appNames = ["orias", "asag", "alloc", "keepmeup", "asmodeus", "styx", "rotgrab"];
 
 const svg = await satori(
   h("div", {
@@ -23,119 +37,74 @@ const svg = await satori(
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      background:
-        "radial-gradient(ellipse at 18% 55%, rgba(79,126,255,0.14) 0%, transparent 55%), #0D0D0F",
-      fontFamily: '"Plus Jakarta Sans"',
+      background: BG,
+      fontFamily: '"JetBrains Mono"',
     },
   },
+    // Pane
     h("div", {
       style: {
-        width: 1040,
-        padding: "60px 70px",
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 24,
+        width: 1080,
+        height: 510,
+        position: "relative",
         display: "flex",
         flexDirection: "column",
+        background: SURFACE,
+        border: `2px solid ${BORDER}`,
+        borderRadius: 6,
+        padding: "64px 64px 48px",
       },
     },
-      // Badge row
+      // Pane title sitting on the top border
       h("div", {
         style: {
+          position: "absolute",
+          top: -14,
+          left: 36,
+          padding: "0 12px",
+          background: SURFACE,
+          fontSize: 20,
+          color: MUTED,
           display: "flex",
-          alignItems: "center",
-          gap: 10,
-          marginBottom: 36,
         },
-      },
-        h("div", {
-          style: {
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: "#4F7EFF",
-          },
-        }),
-        h("span", {
-          style: {
-            fontSize: 13,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(79,126,255,0.75)",
-            fontWeight: 600,
-          },
-        }, "r0tten0x.dev")
+      }, "zsh — r0tten0x.dev"),
+
+      h("div", { style: { display: "flex", fontSize: 24, color: MUTED, marginBottom: 28 } },
+        h("span", { style: { color: ACCENT, marginRight: 14 } }, "$"),
+        "whoami"
       ),
 
-      // Headline
       h("div", {
-        style: {
-          fontSize: 58,
-          fontWeight: 700,
-          color: "#F0F0F5",
-          lineHeight: 1.1,
-          letterSpacing: "-0.02em",
-          marginBottom: 14,
-        },
-      }, "Independent Software Engineer"),
+        style: { fontSize: 60, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-0.02em" },
+      }, "Rust tools for the machine"),
+      h("div", {
+        style: { fontSize: 60, fontWeight: 700, color: ACCENT, lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 44 },
+      }, "you actually use."),
 
-      // Sub-headline
-      h("div", {
-        style: {
-          fontSize: 40,
-          fontWeight: 600,
-          color: "#4F7EFF",
-          lineHeight: 1.15,
-          letterSpacing: "-0.01em",
-          marginBottom: 48,
-        },
-      }, "Building SaaS, Web & Mobile Products"),
+      h("div", { style: { display: "flex", fontSize: 22, color: MUTED, marginBottom: 12 } },
+        h("span", { style: { color: ACCENT, marginRight: 14 } }, ">"),
+        "ls --apps"
+      ),
+      h("div", { style: { display: "flex", flexWrap: "wrap", fontSize: 22, color: FG } },
+        ...appNames.map((name) => h("span", { key: name, style: { marginRight: 30 } }, name))
+      ),
 
-      // Divider
+      // Footer
       h("div", {
         style: {
-          width: "100%",
-          height: 1,
-          background: "rgba(255,255,255,0.07)",
-          marginBottom: 32,
-        },
-      }),
-
-      // Footer row
-      h("div", {
-        style: {
+          marginTop: "auto",
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-between",
+          fontSize: 18,
+          color: MUTED,
         },
       },
-        h("span", {
-          style: {
-            fontSize: 16,
-            fontWeight: 600,
-            color: "rgba(240,240,245,0.30)",
-            letterSpacing: "0.02em",
-          },
-        }, "Full-stack · 27 years in IT · Ships solo"),
-        h("span", {
-          style: {
-            fontSize: 16,
-            fontWeight: 600,
-            color: "rgba(79,126,255,0.50)",
-            letterSpacing: "0.08em",
-          },
-        }, "→")
+        h("span", null, "systems & rust developer · macOS · 27 years in IT"),
+        h("span", { style: { color: ACCENT } }, "r0tten0x.dev")
       )
     )
   ),
-  {
-    width: 1200,
-    height: 630,
-    fonts: [
-      { name: "Plus Jakarta Sans", data: fontSemiBold, weight: 600, style: "normal" },
-      { name: "Plus Jakarta Sans", data: fontBold, weight: 700, style: "normal" },
-    ],
-  }
+  { width: 1200, height: 630, fonts }
 );
 
 const resvg = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } });
@@ -152,49 +121,16 @@ const iconSvg = await satori(
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      background:
-        "radial-gradient(ellipse at 40% 40%, rgba(79,126,255,0.22) 0%, transparent 65%), #0D0D0F",
-      fontFamily: '"Plus Jakarta Sans"',
+      background: BG,
+      fontFamily: '"JetBrains Mono"',
     },
   },
-    h("div", {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 0,
-      },
-    },
-      h("span", {
-        style: {
-          fontSize: 72,
-          fontWeight: 700,
-          color: "#F0F0F5",
-          letterSpacing: "-0.04em",
-          lineHeight: 1,
-        },
-      }, "R0"),
-      h("span", {
-        style: {
-          fontSize: 13,
-          fontWeight: 600,
-          color: "#4F7EFF",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          marginTop: 4,
-        },
-      }, "dev")
+    h("div", { style: { display: "flex", alignItems: "baseline" } },
+      h("span", { style: { fontSize: 64, fontWeight: 700, color: ACCENT, marginRight: 6 } }, ">"),
+      h("span", { style: { fontSize: 64, fontWeight: 700, color: FG, letterSpacing: "-0.04em" } }, "R0")
     )
   ),
-  {
-    width: 180,
-    height: 180,
-    fonts: [
-      { name: "Plus Jakarta Sans", data: fontSemiBold, weight: 600, style: "normal" },
-      { name: "Plus Jakarta Sans", data: fontBold, weight: 700, style: "normal" },
-    ],
-  }
+  { width: 180, height: 180, fonts }
 );
 
 const iconPng = new Resvg(iconSvg, { fitTo: { mode: "width", value: 180 } }).render().asPng();

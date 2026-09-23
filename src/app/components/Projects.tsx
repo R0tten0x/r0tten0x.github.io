@@ -3,139 +3,110 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import SectionLabel from "./SectionLabel";
+import { apps, earlierWork, type App, type AppStatus } from "../data/apps";
 
-const projects = [
-  {
-    name: "Bury Me Here",
-    description:
-      "Sometimes we don't want a response, bury your secrets below and move on.",
-    link: "https://burymehere.app",
-  },
-  {
-    name: "MollisonTownhomes",
-    description:
-      "Empowering residents to stay up to date on theft, sales, upcoming events, and missing packages.",
-    link: null,
-  },
-  {
-    name: "Ember",
-    description: "A Beautiful terminal developer dashboard for powerusers",
-    link: null,
-  },
-];
+const statusStyles: Record<AppStatus, string> = {
+  active: "text-primary border-primary/40",
+  stable: "text-success border-success/40",
+  archived: "text-muted border-border",
+};
 
-const completedProjects = [
-  {
-    name: "StillUp",
-    description:
-      "Uptime monitoring and beautiful public status pages — starting at $9/mo. Half the price of the competition, all the features your SaaS needs.",
-    link: "https://www.stillup.org",
-  },
-  {
-    name: "Charge Shield",
-    description: "ChargeShield fights chargebacks so you don't have to.",
-    link: "http://r0tten0x.dev/cs-demo/index.html",
-  },
-  {
-    name: "SnappIcon",
-    description:
-      "Why spend hours creating web-ready icons when SnappIcon exists.",
-    link: "https://snappicon.com",
-  },
-  {
-    name: "Rust from Zero",
-    description:
-      "A course built to learn rust in a custructivst approach. For those who need the why before the what.",
-    link: "https://github.com/R0tten0x/Rust-Course",
-  },
-];
-
-function ProjectCard({
-  project,
-  index,
-  linkLabel = "View Project",
-}: {
-  project: { name: string; description: string; link: string | null };
-  index: number;
-  linkLabel?: string;
-}) {
+function StatusTag({ status }: { status: AppStatus }) {
   return (
-    <motion.div
-      className="group glass rounded-2xl p-6 flex flex-col transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_40px_rgba(79,126,255,0.07)]"
-      initial={{ opacity: 0, y: 30 }}
+    <span
+      className={`font-mono text-[11px] px-1.5 py-0.5 border rounded-[2px] ${statusStyles[status]}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+function AppPane({ app, index }: { app: App; index: number }) {
+  return (
+    <motion.article
+      className="group pane p-5 pt-6 flex flex-col transition-colors duration-200 hover:border-primary/60"
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.4, delay: (index % 2) * 0.08 }}
     >
-      <div className="flex-1">
-        <h3 className="text-base font-semibold mb-2 tracking-tight">
-          {project.name}
+      <span className="pane-title">{app.kind}</span>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <h3 className="font-mono text-lg font-semibold tracking-tight">
+          <span className="text-primary">▸</span> {app.name.toLowerCase()}
         </h3>
-        <p className="text-white/40 text-sm leading-relaxed font-light">
-          {project.description}
-        </p>
+        <StatusTag status={app.status} />
       </div>
-      {project.link && (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 mt-5 text-[11px] font-mono tracking-wider uppercase text-primary/70 hover:text-primary transition-colors"
-        >
-          {linkLabel}
-          <span className="transition-transform group-hover:translate-x-0.5">
-            &rarr;
-          </span>
-        </a>
-      )}
-    </motion.div>
+      <p className="text-foreground/65 text-sm leading-relaxed flex-1">
+        {app.description}
+      </p>
+      <div className="mt-5 flex items-end justify-between gap-3 flex-wrap">
+        <ul className="flex flex-wrap gap-1.5">
+          {app.stack.map((crate) => (
+            <li
+              key={crate}
+              className="font-mono text-[11px] text-muted bg-background border border-border px-1.5 py-0.5 rounded-[2px]"
+            >
+              {crate}
+            </li>
+          ))}
+        </ul>
+        {app.repo ? (
+          <a
+            href={app.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-xs text-primary hover:underline underline-offset-4"
+          >
+            source →
+          </a>
+        ) : (
+          <span className="font-mono text-xs text-muted/60">private</span>
+        )}
+      </div>
+    </motion.article>
   );
 }
 
 export default function Projects() {
   return (
-    <AnimatedSection id="projects" className="max-w-4xl mx-auto px-6 py-28">
-      <SectionLabel label="Work" />
-      <h2 className="text-3xl md:text-4xl font-bold mb-12 tracking-tight">
+    <AnimatedSection id="apps" className="max-w-5xl mx-auto px-6 py-24">
+      <SectionLabel label="Apps" />
+      <h2 className="font-mono text-2xl md:text-3xl font-bold mb-12 tracking-tight">
         Things I&apos;ve built.
       </h2>
 
-      <div className="mb-12">
-        <div className="flex items-center gap-3 mb-6">
-          <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-primary/60">
-            In Development
-          </span>
-          <div className="flex-1 h-px bg-white/[0.06]" />
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          {projects.map((project, i) => (
-            <ProjectCard
-              key={project.name}
-              project={project}
-              index={i}
-              linkLabel="View Project"
-            />
-          ))}
-        </div>
+      <div className="grid gap-5 md:grid-cols-2">
+        {apps.map((app, i) => (
+          <AppPane key={app.name} app={app} index={i} />
+        ))}
       </div>
 
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-primary/60">
-            Shipped
-          </span>
-          <div className="flex-1 h-px bg-white/[0.06]" />
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {completedProjects.map((project, i) => (
-            <ProjectCard
-              key={project.name}
-              project={project}
-              index={i}
-              linkLabel="Visit"
-            />
+      <div className="mt-14">
+        <p className="font-mono text-xs text-muted mb-4">
+          <span className="text-primary">#</span> earlier work
+        </p>
+        <ul className="border-t border-border">
+          {earlierWork.map((item) => (
+            <li
+              key={item.name}
+              className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 py-3 border-b border-border font-mono text-sm"
+            >
+              <span className="text-foreground sm:w-40 shrink-0">{item.name}</span>
+              <span className="text-muted flex-1 font-sans">{item.description}</span>
+              {item.link && (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary text-xs hover:underline underline-offset-4"
+                >
+                  view →
+                </a>
+              )}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </AnimatedSection>
   );
